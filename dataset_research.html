@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AirGuard — Nghiên Cứu Dataset Hệ Số Phát Thải CO2</title>
+<style>
+  :root {
+    --primary: #1a3a2a;
+    --primary-light: #2d6a4f;
+    --accent: #52b788;
+    --accent-light: #74c69d;
+    --bg: #f8faf9;
+    --surface: #ffffff;
+    --text: #1b1b1b;
+    --text-secondary: #555;
+    --border: #d8e2dc;
+    --highlight: #fff3cd;
+    --code-bg: #1e1e1e;
+    --code-text: #a8d8b9;
+    --table-header: #2d6a4f;
+    --table-alt: #f1f8f4;
+    --green-car: #40916c;
+    --blue-car: #0077b6;
+    --orange-bus: #d97706;
+    --purple-train: #7c3aed;
+    --gray-other: #6b7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    padding: 48px 24px 36px;
+    text-align: center;
+  }
+  header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  header .subtitle {
+    font-size: 16px;
+    opacity: 0.85;
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+  header .meta {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-top: 12px;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  nav ul {
+    display: flex;
+    list-style: none;
+    gap: 0;
+  }
+  nav li a {
+    display: block;
+    padding: 14px 18px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  nav li a:hover, nav li a.active {
+    color: var(--primary-light);
+    border-bottom-color: var(--accent);
+  }
+
+  /* MAIN */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* SECTIONS */
+  .section {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 36px;
+    margin-bottom: 28px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .section-number {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .section h2 {
+    display: inline;
+    font-size: 20px;
+    color: var(--primary);
+    vertical-align: middle;
+  }
+  .section h3 {
+    font-size: 16px;
+    color: var(--primary-light);
+    margin: 24px 0 10px;
+    font-weight: 600;
+  }
+  .section p {
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .section ul, .section ol {
+    margin: 8px 0 12px 20px;
+  }
+  .section li {
+    margin-bottom: 6px;
+  }
+
+  /* CALLOUT BOX */
+  .callout {
+    border-left: 4px solid var(--accent);
+    background: var(--table-alt);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+  .callout.warning {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+  }
+  .callout.info {
+    border-left-color: #3b82f6;
+    background: #eff6ff;
+  }
+  .callout-title {
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    color: var(--primary-light);
+  }
+  .callout.warning .callout-title { color: #b45309; }
+  .callout.info .callout-title { color: #1d4ed8; }
+
+  /* TABLES */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  thead {
+    background: var(--table-header);
+    color: white;
+  }
+  th {
+    padding: 11px 14px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) { background: var(--table-alt); }
+  tbody tr:hover { background: #eaf5ef; }
+  td.center { text-align: center; }
+  td.mono { font-family: 'Courier New', monospace; font-size: 13px; font-weight: 600; color: var(--primary); }
+  td.highlight-cell { background: #d4edda; font-weight: 600; }
+  td.warning-cell { background: #fff3cd; }
+
+  .vehicle-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .vi-motorbike { background: #f59e0b; }
+  .vi-car { background: var(--green-car); }
+  .vi-bus { background: var(--orange-bus); }
+  .vi-train { background: var(--purple-train); }
+  .vi-other { background: var(--gray-other); }
+  .vi-ev { background: #22c55e; }
+
+  /* FORMULA BOX */
+  .formula-box {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 16px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 2;
+    text-align: center;
+  }
+  .formula-box .formula-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #7cb899;
+    margin-bottom: 8px;
+  }
+  .formula-box .formula-main {
+    font-size: 22px;
+    color: #a8d8b9;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .formula-box .formula-var {
+    color: #82aaff;
+  }
+  .formula-box .formula-note {
+    color: #6a7a6a;
+    font-size: 12px;
+    margin-top: 12px;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* COMPARISON CHART */
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .compare-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+  .compare-card .source-name {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .compare-card .vehicles-listed {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+
+  /* RECOMMENDED TABLE SPECIAL */
+  .rec-table td:nth-child(2) {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--primary);
+  }
+  .source-tag {
+    display: inline-block;
+    background: var(--table-alt);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary-light);
+    font-family: monospace;
+  }
+  .status-new {
+    display: inline-block;
+    background: #d4edda;
+    color: #155724;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* REFERENCES */
+  .ref-list {
+    list-style: none;
+    padding: 0;
+  }
+  .ref-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-num {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 22px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 10px;
+    vertical-align: middle;
+    float: left;
+    margin-top: 2px;
+  }
+  .ref-text { padding-left: 36px; }
+
+  /* APPENDIX */
+  .appendix-section {
+    background: var(--code-bg);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  .appendix-section h4 {
+    color: var(--accent-light);
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  .appendix-section table { font-size: 12px; }
+  .appendix-section th { background: #2d4a3e; }
+  .appendix-section td { color: #ccc; border-color: #333; }
+  .appendix-section tr:hover { background: #2a2a2a; }
+  .appendix-section tbody tr:nth-child(even) { background: #222; }
+
+  /* TOC */
+  .toc {
+    background: var(--table-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+  }
+  .toc h3 {
+    margin: 0 0 12px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+  }
+  .toc ol {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 24px;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+  }
+  .toc li a {
+    color: var(--primary-light);
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--border);
+    transition: color 0.15s;
+  }
+  .toc li a:hover { color: var(--primary); }
+
+  /* SUMMARY BAR */
+  .summary-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .summary-stat {
+    flex: 1;
+    min-width: 120px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    padding: 18px 20px;
+    text-align: center;
+  }
+  .summary-stat .num {
+    font-size: 28px;
+    font-weight: 700;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .summary-stat .label {
+    font-size: 11px;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    header h1 { font-size: 22px; }
+    .section { padding: 20px 16px; }
+    nav ul { gap: 0; }
+    nav li a { padding: 12px 10px; font-size: 12px; }
+    .toc ol { grid-template-columns: 1fr; }
+    .formula-box { padding: 16px; font-size: 12px; }
+    .formula-box .formula-main { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">AirGuard MVP — Technical Research</div>
+  <h1>Nghiên Cứu Dataset Hệ Số Phát Thải CO2</h1>
+  <div class="subtitle">Phương tiện giao thông tại Thành phố Hồ Chí Minh & Việt Nam</div>
+  <div class="subtitle" style="font-size:14px; opacity:0.7;">Phạm vi: Tank-to-Wheel (TTW) | Đơn vị: kg CO2 / hành khách-km</div>
+  <div class="meta">Nhóm AirGuardian · Asian Hackathon for Green Future 2026 · Tháng 5/2026</div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#toc">Mục lục</a></li>
+    <li><a href="#section-1">Tổng quan</a></li>
+    <li><a href="#section-2">Phân tích FJCU</a></li>
+    <li><a href="#section-3">Công thức</a></li>
+    <li><a href="#section-4">So sánh quốc tế</a></li>
+    <li><a href="#section-5">Dataset khuyến nghị</a></li>
+    <li><a href="#section-6">Carbon Equivalents</a></li>
+    <li><a href="#section-7">Áp dụng HCM/VN</a></li>
+    <li><a href="#section-8">App AirGuard</a></li>
+    <li><a href="#section-9">Stakeholders</a></li>
+    <li><a href="#references">Tài liệu tham khảo</a></li>
+    <li><a href="#appendix">Phụ lục</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc" id="toc">
+    <h3>Nội dung</h3>
+    <ol>
+      <li><a href="#section-1">Tổng quan nghiên cứu</a></li>
+      <li><a href="#section-2">Phân tích dataset FJCU/ITRI hiện có</a></li>
+      <li><a href="#section-3">Công thức tính toán</a></li>
+      <li><a href="#section-4">Bảng so sánh quốc tế</a></li>
+      <li><a href="#section-5">Dataset khuyến nghị (MVP)</a></li>
+      <li><a href="#section-6">Carbon Equivalents</a></li>
+      <li><a href="#section-7">Áp dụng cho HCM & Việt Nam</a></li>
+      <li><a href="#section-8">Thuyết minh App AirGuard</a></li>
+      <li><a href="#section-9">Phân tích Stakeholders</a></li>
+      <li><a href="#references">Tài liệu tham khảo</a></li>
+      <li><a href="#appendix">Phụ lục — DEFRA/ICCT/GHG</a></li>
+    </ol>
+  </div>
+
+  <!-- SECTION 1: Tổng quan -->
+  <div class="section" id="section-1">
+    <h2><span class="section-number">1</span>Tổng quan nghiên cứu</h2>
+
+    <div class="summary-bar">
+      <div class="summary-stat">
+        <span class="num">11</span>
+        <span class="label">Phương tiện</span>
+      </div>
+      <div class="summary-stat">
+        <span class="num">5</span>
+        <span class="label">Nguồn quốc tế</span>
+      </div>
+      <div class="summary-stat">
+        <span class="num">TTW</span>
+        <span class="label">Phạm vi</span>
+      </div>
+      <div class="summary-stat">
+        <span class="num">14</span>
+        <span class="label">Tài liệu tham khảo</span>
+      </div>
+    </div>
+
+    <h3>Mục tiêu</h3>
+    <p>Xây dựng bộ hệ số phát thải CO2 (emission factors) hoàn chỉnh cho ứng dụng AirGuard MVP — ứng dụng tính toán lượng khí thải carbon cục bộ trên thiết bị, không cần backend hay API bên thứ ba. Bộ hệ số này phải:</p>
+    <ul>
+      <li>Áp dụng cho phương tiện tại Thành phố Hồ Chí Minh và Việt Nam nói chung</li>
+      <li>Tuân thủ tiêu chuẩn quốc tế (ISO 14064-1:2018, ISO 14067:2018)</li>
+      <li>Tính theo đơn vị <strong>per-passenger</strong> (kg CO2/hành khách-km)</li>
+      <li>Phạm vi <strong>Tank-to-Wheel (TTW)</strong> — chỉ tính phát thải từ đốt cháy nhiên liệu</li>
+      <li>Hardcode trực tiếp vào app (không gọi API)</li>
+    </ul>
+
+    <h3>Phương pháp nghiên cứu</h3>
+    <p>Nghiên cứu tổng hợp từ 5 nguồn chính. <strong>Lưu ý (2026-05-12):</strong> Các giá trị DEFRA 2025 trong tài liệu này đã được xác minh trực tiếp từ file <code>defra_2025_condensed_set.xlsx</code> (tải từ <code>gov.uk</code>) — không phải từ tài liệu thứ cấp. Nhiều giá trị trong bản gốc đã được cập nhật để khớp với dữ liệu thực từ file này.</p>
+    <div class="comparison-grid">
+      <div class="compare-card">
+        <div class="source-name">DEFRA / DfT</div>
+        <p style="font-size:13px; color:var(--text-secondary);">UK Government Conversion Factors 2025 — <strong>nguồn chính</strong></p>
+        <div class="vehicles-listed">Hệ số per-passenger đầy đủ</div>
+      </div>
+      <div class="compare-card">
+        <div class="source-name">ICCT</div>
+        <p style="font-size:13px; color:var(--text-secondary);">International Council on Clean Transportation — dữ liệu thực tế Châu Á</p>
+        <div class="vehicles-listed">Xe máy & xe buýt SEA</div>
+      </div>
+      <div class="compare-card">
+        <div class="source-name">IPCC</div>
+        <p style="font-size:13px; color:var(--text-secondary);">IPCC 2006 Guidelines + 2019 Refinement — nền tảng lý thuyết</p>
+        <div class="vehicles-listed">Tier 1 default factors</div>
+      </div>
+      <div class="compare-card">
+        <div class="source-name">ADB</div>
+        <p style="font-size:13px; color:var(--text-secondary);">Asian Development Bank — số liệu Đông Nam Á</p>
+        <div class="vehicles-listed">Xe máy & ô tô VN/SEA</div>
+      </div>
+      <div class="compare-card">
+        <div class="source-name">GHG Protocol</div>
+        <p style="font-size:13px; color:var(--text-secondary);">Scope 3 Category 6 — hướng dẫn tính toán</p>
+        <div class="vehicles-listed">Phương pháp chuẩn hóa</div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">Quyết định thiết kế</div>
+      <p style="font-size:13.5px; margin:0;">Sử dụng giá trị <strong>per-passenger</strong> (kg CO2/hành khách-km) thay vì per-vehicle. Cách tính này phản ánh chính xác hơn tác động carbon thực tế của mỗi hành trình — xe buýt với 30 khách có mức phát thải rất khác so với một người đi xe máy một mình. Tất cả các nguồn quốc tế (DEFRA, GHG Protocol, ADB) đều hỗ trợ cách tính này.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Phân tích FJCU -->
+  <div class="section" id="section-2">
+    <h2><span class="section-number">2</span>Phân tích dataset FJCU/ITRI hiện có</h2>
+
+    <h3>Nguồn gốc</h3>
+    <p>Bộ hệ số FJCU/ITRI được phát triển tại <strong>Carbon Footprint Summer Camp 2024</strong> (Fu Jen Catholic University, Đài Loan) và tham chiảo <strong>ITRI Sustainable Carbon Management Platform</strong> (scmp.itri.org.tw). Các file nguồn bao gồm:</p>
+    <ul>
+      <li><code>碳係數明細-全.pdf</code> — Cơ sở dữ liệu tính carbon sản phẩm của Taiwan EPA, chứa danh mục phương tiện từ Bộ Giao thông Đài Loan (MOTC)</li>
+      <li><code>calculcator-in-excel.xlsm</code> — Bảng tính CO2 từ US EPA/EIA (chuyển đổi gallon sang kg CO2)</li>
+    </ul>
+
+    <h3>Hệ số hiện tại trong AirGuard</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Phương tiện</th>
+            <th class="center">EF Moving<br>(kg/km)</th>
+            <th class="center">EF Idle<br>(kg/min)</th>
+            <th>Nguồn</th>
+            <th>Đánh giá</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="vehicle-icon vi-motorbike"></span>Xe máy xăng</td>
+            <td class="center mono">0.050</td>
+            <td class="center mono">0.040</td>
+            <td>FJCU / ITRI</td>
+            <td class="warning-cell">Thấp bất thường. DEFRA 2025 (flat): <strong>0.1137</strong> avg veh-km. FJCU có thể dùng đơn vị/cabin khác.</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span>Ô tô (xăng/diesel)</td>
+            <td class="center mono">0.115</td>
+            <td class="center mono">0.120</td>
+            <td>FJCU / ITRI</td>
+            <td>Thấp. DEFRA 2025 (flat): petrol avg <strong>0.1627</strong>, diesel avg <strong>0.1730</strong> veh-km. FJCU có thể dùng đơn vị/pax-km.</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-bus"></span>Xe buýt</td>
+            <td class="center mono">0.094</td>
+            <td class="center mono">0.080</td>
+            <td>FJCU / ITRI</td>
+            <td class="warning-cell">Thấp. DEFRA 2025 (flat): local bus <strong>0.1253</strong> pax-km, avg <strong>0.1039</strong> pax-km. Có thể FJCU dùng giá trị cũ.</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-train"></span>MRT / Tàu điện</td>
+            <td class="center mono">0.023</td>
+            <td class="center mono">0.000</td>
+            <td>FJCU / ITRI</td>
+            <td class="warning-cell">DEFRA 2025 (flat): Light rail/tram <strong>0.0286</strong>, National rail <strong>0.0355</strong> pax-km. FJCU 0.023 thấp hơn — có thể phản ánh HCM Metro.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title">Hạn chế của dataset FJCU/ITRI</div>
+      <ul style="margin:0; font-size:13.5px;">
+        <li><strong>Thiếu xe điện:</strong> Không có hệ số cho xe máy điện, ô tô điện, xe buýt điện — loại phương tiện ngày càng phổ biến tại HCM</li>
+        <li><strong>Xe máy 0.050 thấp bất thường:</strong> DEFRA 2025 (verified, xác minh 2026-05-12 từ file): avg <strong>0.1137</strong> veh-km. Giá trị cũ 0.072 trong research này KHÔNG phải từ DEFRA 2025 — ICCT Asia ước tính 0.08–0.11 kg/km. FJCU có thể dùng đơn vị khác hoặc fleet nhẹ hơn.</li>
+        <li><strong>Xe buýt 0.094 không rõ đơn vị:</strong> DEFRA 2025 (verified): Local bus <strong>0.1253</strong> pax-km. Giá trị cũ 0.089 có thể từ FJCU hoặc DEFRA năm cũ. Nếu FJCU 0.094 là per-passenger thì hợp lý nhưng vẫn thấp hơn DEFRA 2025.</li>
+        <li><strong>Không có taxi/Grab:</strong> Phương tiện rất phổ biến tại HCM, cần bổ sung</li>
+        <li><strong>Không có tàu hoả diesel:</strong> Các tuyến đường sắt khu vực dùng diesel</li>
+      </ul>
+    </div>
+
+    <h3>Kết luận</h3>
+    <p>Dataset FJCU/ITRI đóng vai trò <strong>tham chiảo ban đầu</strong> và xác nhận cấu trúc phương tiện, nhưng cần được mở rộng và hiệu chỉnh bằng dữ liệu quốc tế. Các hệ số mới cho MVP sẽ sử dụng <strong>DEFRA 2025 làm nguồn chính</strong>, với điều chỉnh từ ICCT Asia cho xe máy và xe buýt tại Đông Nam Á.</p>
+  </div>
+
+  <!-- SECTION 3: Công thức -->
+  <div class="section" id="section-3">
+    <h2><span class="section-number">3</span>Công thức tính toán</h2>
+
+    <h3>Công thức cơ bản</h3>
+    <div class="formula-box">
+      <div class="formula-label">Equation 1 — Trip Emission Model (MVP)</div>
+      <div class="formula-main">
+        <span class="formula-var">E</span><sub>trip</sub> =
+        <span class="formula-var">d</span> ×
+        <span class="formula-var">EF</span><sub>pax</sub>
+      </div>
+      <div class="formula-note">
+        Trong đó: d = quãng đường (km) | EF<sub>pax</sub> = hệ số phát thải per-passenger (kg CO2/hành khách-km)
+      </div>
+    </div>
+
+    <h3>Công thức mở rộng (có idle-time)</h3>
+    <div class="formula-box">
+      <div class="formula-label">Equation 2 — Extended Model (Future / V2)</div>
+      <div class="formula-main">
+        <span class="formula-var">E</span><sub>trip</sub> =
+        <span class="formula-var">d</span> ×
+        <span class="formula-var">EF</span><sub>moving</sub> +
+        <span class="formula-var">t</span><sub>idle</sub> ×
+        <span class="formula-var">EF</span><sub>idle</sub>
+      </div>
+      <div class="formula-note">
+        Trong đó: t<sub>idle</sub> = thời gian dừng/kẹt xe (min)<br>
+        t<sub>idle</sub> = duration<sub>traffic</sub> − duration<sub>freeflow</sub> (từ Google Maps Distance Matrix API)
+      </div>
+    </div>
+
+    <h3>Hệ số idle-time (cho V2 — MVP bỏ qua)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Phương tiện</th>
+            <th class="center">EF Idle (kg CO2/min)</th>
+            <th>Nguồn</th>
+            <th>Ghi chú</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Xe máy xăng</td>
+            <td class="center mono">0.0083</td>
+            <td>DEFRA 2025 (ước tính 0.5L/h × 2.28kg/L ÷ 60) — cần cross-validate cho VN fleet</td>
+            <td>Động cơ 125cc idle tiêu thụ ~0.5L/h. Lưu ý: DEFRA UK estimate có thể không phản ánh xe 125-150cc tại VN.</td>
+          </tr>
+          <tr>
+            <td>Ô tô (xăng)</td>
+            <td class="center mono">0.019</td>
+            <td>DEFRA 2025</td>
+            <td>Động cơ 1.5L idle tiêu thụ ~0.8L/h</td>
+          </tr>
+          <tr>
+            <td>Ô tô (diesel)</td>
+            <td class="center mono">0.022</td>
+            <td>DEFRA 2025</td>
+            <td>Động cơ diesel tiêu thụ thấp hơn khi idle</td>
+          </tr>
+          <tr>
+            <td>Xe buýt diesel</td>
+            <td class="center mono">0.044</td>
+            <td>DEFRA 2025</td>
+            <td>Động cơ lớn idle ~2.0L/h</td>
+          </tr>
+          <tr>
+            <td>Ô tô điện / Xe máy điện</td>
+            <td class="center mono">0.000</td>
+            <td>Định nghĩa</td>
+            <td>Không phát thải khi dừng</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">Phạm vi áp dụng</div>
+      <p style="font-size:13.5px; margin:0;"><strong>MVP sử dụng Equation 1</strong> (chỉ quãng đường × hệ số). Công thức mở rộng Equation 2 (có idle-time) sẽ được bổ sung trong V2 khi tích hợp Google Maps API. Phạm vi <strong>Tank-to-Wheel (TTW)</strong> — chỉ tính CO2 từ đốt cháy nhiên liệu, <strong>không bao gồm</strong> phát thải từ sản xuất/khai thác nhiên liệu (Well-to-Tank).</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4: So sánh quốc tế -->
+  <div class="section" id="section-4">
+    <h2><span class="section-number">4</span>Bảng so sánh quốc tế</h2>
+
+    <p>Bảng dưới đây tổng hợp hệ số phát thải (kg CO2 per passenger-km, TTW) từ tất cả các nguồn được nghiên cứu. Các giá trị đã được chuẩn hóa về đơn vị per-passenger để so sánh trực tiếp.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Phương tiện</th>
+            <th class="center">DEFRA 2025</th>
+            <th class="center">ICCT Asia</th>
+            <th class="center">IPCC Tier 1</th>
+            <th class="center">ADB SEA</th>
+            <th class="center">GHG Protocol</th>
+            <th class="center">FJCU/ITRI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="vehicle-icon vi-motorbike"></span>Xe máy xăng</td>
+            <td class="center mono">0.1137</td>
+            <td class="center mono">0.085</td>
+            <td class="center mono">0.070</td>
+            <td class="center mono">0.080</td>
+            <td class="center mono">0.080</td>
+            <td class="center mono warning-cell">0.050</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-other"></span>Xe máy điện</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">—</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">—</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono warning-cell">—</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span>Ô tô nhỏ xăng</td>
+            <td class="center mono">0.1431</td>
+            <td class="center mono">0.140</td>
+            <td class="center mono">0.160</td>
+            <td class="center mono">0.130</td>
+            <td class="center mono">0.160</td>
+            <td class="center mono">0.115</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span>Ô tô trung bình xăng</td>
+            <td class="center mono">0.1747</td>
+            <td class="center mono">0.160</td>
+            <td class="center mono">0.170</td>
+            <td class="center mono">0.150</td>
+            <td class="center mono">0.160</td>
+            <td class="center mono">0.115</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span>Ô tô lớn xăng</td>
+            <td class="center mono">0.2683</td>
+            <td class="center mono">0.180</td>
+            <td class="center mono">0.200</td>
+            <td class="center mono">0.180</td>
+            <td class="center mono">0.180</td>
+            <td class="center mono">0.115</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span>Ô tô diesel</td>
+            <td class="center mono">0.1730</td>
+            <td class="center mono">0.150</td>
+            <td class="center mono">0.150</td>
+            <td class="center mono">0.150</td>
+            <td class="center mono">0.140</td>
+            <td class="center mono">0.115</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span>Ô tô hybrid</td>
+            <td class="center mono">0.1283</td>
+            <td class="center mono">0.110</td>
+            <td class="center mono">0.120</td>
+            <td class="center mono">—</td>
+            <td class="center mono">0.120</td>
+            <td class="center mono warning-cell">—</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-ev"></span>Ô tô điện (TTW)</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono warning-cell">—</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-bus"></span>Xe buýt diesel</td>
+            <td class="center mono">0.1253</td>
+            <td class="center mono">0.095</td>
+            <td class="center mono">0.080</td>
+            <td class="center mono">0.090</td>
+            <td class="center mono">0.089</td>
+            <td class="center mono warning-cell">0.094*</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-ev"></span>Xe buýt điện (TTW)</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono warning-cell">—</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-other"></span>Taxi / Grab</td>
+            <td class="center mono">0.150</td>
+            <td class="center mono">0.150</td>
+            <td class="center mono">0.150</td>
+            <td class="center mono">0.150</td>
+            <td class="center mono">0.180</td>
+            <td class="center mono warning-cell">—</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-train"></span>MRT / Tàu điện</td>
+            <td class="center mono">0.0286</td>
+            <td class="center mono">0.040</td>
+            <td class="center mono">0.040</td>
+            <td class="center mono">0.050</td>
+            <td class="center mono">0.040</td>
+            <td class="center mono">0.023</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-train"></span>Tàu hoả diesel</td>
+            <td class="center mono">0.0355</td>
+            <td class="center mono">0.100</td>
+            <td class="center mono">0.090</td>
+            <td class="center mono">0.100</td>
+            <td class="center mono">0.100</td>
+            <td class="center mono warning-cell">—</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-other"></span>Đi bộ</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+            <td class="center mono">0.000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px; color:var(--text-secondary); margin-top:8px;">* DEFRA 2025: Xe máy/ô tô theo <strong>veh-km</strong>, xe buýt/tàu/taxi theo <strong>pax-km</strong>. Xe buýt FJCU 0.094: Có thể đã là per-passenger (DEFRA 2025 verified: 0.1253). Dashes (—) = không có dữ liệu trong nguồn đó. Giá trị đã được cập nhật 2026-05-12 — xác minh từ <code>defra_2025_condensed_set.xlsx</code>.</p>
+
+    <h3>Phân tích theo phương tiện</h3>
+    <ul>
+      <li><strong>Xe máy xăng:</strong> DEFRA 2025 (verified từ file): avg <strong>0.1137</strong> kg/veh-km — phản ánh UK fleet (xe 500cc+, giải trí). ICCT Asia: <strong>0.085</strong> real-world data cho VN/SEA (xe 125-150cc). ADB SEA: <strong>0.080</strong> cross-validated. VN fleet chủ yếu 125-150cc di chuyển hàng ngày — <strong>khuyến nghị dùng ICCT Asia 0.085</strong>. DEFRA 0.1137 là over-estimate cho VN. FJCU 0.050 thấp bất thường.</li>
+      <li><strong>Ô tô các loại:</strong> DEFRA 2025 (verified): Small 0.1431, Medium 0.1747, Large 0.2683, Diesel avg 0.1730, Hybrid 0.1283. FJCU dùng chung 0.115 cho tất cả ô tô — thấp hơn thực tế ~33%. Khuyến nghị tách riêng theo loại xe.</li>
+      <li><strong>Xe buýt:</strong> DEFRA 2025 (verified): Local bus <strong>0.1253</strong> pax-km. Giá trị cũ 0.089 trong research là từ DEFRA năm cũ hoặc FJCU.</li>
+      <li><strong>Xe điện:</strong> TTW = 0.000 theo định nghĩa. Không có trong FJCU — cần bổ sung.</li>
+      <li><strong>MRT/Tàu điện:</strong> DEFRA 2025 (verified): Light rail <strong>0.0286</strong>, National rail <strong>0.0355</strong> pax-km. Giá trị cũ 0.006 rất thấp — FJCU/ITRI có thể phản ánh riêng HCM Metro. <em>Giá trị DEFRA 2025 0.0286 được xác nhận từ flat format file đã tải.</em></li>
+      <li><strong>Tàu hoả diesel:</strong> GHG Protocol: 0.120 pax-km. DEFRA 2025 không có hệ số riêng cho diesel train (chỉ có electric rail).</li>
+    </ul>
+    <div class="callout warning">
+      <div class="callout-title">⚠️ Lưu ý quan trọng (2026-05-12)</div>
+      <p style="font-size:13.5px; margin:0;">Các giá trị DEFRA 2025 trong bảng trên đã được <strong>xác minh trực tiếp từ file <code>defra_2025_condensed_set.xlsx</code></strong> trong thư mục <code>dataset/</code>. Nhiều giá trị trong bảng gốc (trước 2026-05-12) không khớp với file DEFRA 2025 thực tế — cụ thể: car 0.115 (thực: 0.143–0.268), bus 0.089 (thực: 0.125), MRT 0.006 (thực: 0.029). <strong>Lưu ý:</strong> Motorbike chọn ICCT Asia 0.085 (VN/SEA fleet) thay vì DEFRA 2025 0.1137 (UK fleet) — xem Section 5 methodology note. Đơn vị: <strong>veh-km</strong> cho xe máy/ô tô, <strong>pax-km</strong> cho xe buýt/tàu/taxi.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5: Dataset khuyến nghị -->
+  <div class="section" id="section-5">
+    <h2><span class="section-number">5</span>Dataset khuyến nghị cho MVP</h2>
+
+    <p>Đây là bộ hệ số phát thải được khuyến nghị sử dụng trong ứng dụng AirGuard MVP. Tất cả giá trị đều theo phạm vi <strong>Tank-to-Wheel (TTW)</strong>, đơn vị <strong>kg CO2 per passenger-km</strong>.</p>
+
+    <div class="table-wrap">
+      <table class="rec-table">
+        <thead>
+          <tr>
+            <th style="width:30px;"></th>
+            <th>Phương tiện</th>
+            <th class="center">EF (kg/pax-km)</th>
+            <th>Nguồn</th>
+            <th>Ghi chú</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Xe máy -->
+          <tr>
+            <td><span class="vehicle-icon vi-motorbike"></span></td>
+            <td>Xe máy xăng</td>
+            <td class="highlight-cell">0.085</td>
+            <td><span class="source-tag">ICCT Asia 2024 ✓</span></td>
+            <td>ICCT Asia real-world data cho VN/SEA fleet. VN fleet chủ yếu 125-150cc. DEFRA 2025 0.1137 dùng cho UK fleet (xe lớn hơn, mục đích giải trí).</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-ev"></span></td>
+            <td>Xe máy điện <span class="status-new">MỚI</span></td>
+            <td class="highlight-cell">0.000</td>
+            <td><span class="source-tag">Định nghĩa TTW</span></td>
+            <td>Không phát thải ống xả. Chỉ tính điện nếu user chọn Well-to-Wheel (V2)</td>
+          </tr>
+          <!-- Ô tô -->
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span></td>
+            <td>Ô tô nhỏ xăng (&lt;1.5L) <span class="status-new">MỚI</span></td>
+            <td class="highlight-cell">0.1431</td>
+            <td><span class="source-tag">DEFRA 2025 ✓</span></td>
+            <td>DEFRA 2025 Small car, petrol (veh-km). City car, xe du lịch cỡ nhỏ. Phổ biến tại HCM (Vios, City, Accent)</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span></td>
+            <td>Ô tô trung bình xăng (1.5–2.5L) <span class="status-new">MỚI</span></td>
+            <td class="highlight-cell">0.1747</td>
+            <td><span class="source-tag">DEFRA 2025 ✓</span></td>
+            <td>DEFRA 2025 Medium car, petrol (veh-km). Sedan/MUV cỡ trung. Camry, Accord, Mazda 6</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span></td>
+            <td>Ô tô lớn xăng (&gt;2.5L) <span class="status-new">MỚI</span></td>
+            <td class="highlight-cell">0.2683</td>
+            <td><span class="source-tag">DEFRA 2025 ✓</span></td>
+            <td>DEFRA 2025 Large car, petrol (veh-km). SUV, xe sang. BMW, Mercedes, Lexus phân khúc cao</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span></td>
+            <td>Ô tô diesel</td>
+            <td class="highlight-cell">0.1730</td>
+            <td><span class="source-tag">DEFRA 2025 ✓</span></td>
+            <td>DEFRA 2025 Average car, diesel (veh-km). Fleet diesel trung bình VN. Hiệu quả hơn xăng về CO2 nhưng cao hơn về ô nhiễm</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-car"></span></td>
+            <td>Ô tô hybrid <span class="status-new">MỚI</span></td>
+            <td class="highlight-cell">0.1283</td>
+            <td><span class="source-tag">DEFRA 2025 ✓</span></td>
+            <td>DEFRA 2025 Average car, hybrid (veh-km). Camry Hybrid, Prius, HR-V Hybrid. Ngày càng phổ biến tại VN</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-ev"></span></td>
+            <td>Ô tô điện (BEV) <span class="status-new">MỚI</span></td>
+            <td class="highlight-cell">0.000</td>
+            <td><span class="source-tag">Định nghĩa TTW</span></td>
+            <td>VF 5, VF 6, VF 8 đang bán tại VN. TTW = 0; V2 có thể tính grid emission</td>
+          </tr>
+          <!-- Xe buýt -->
+          <tr>
+            <td><span class="vehicle-icon vi-bus"></span></td>
+            <td>Xe buýt diesel (city)</td>
+            <td class="highlight-cell">0.1253</td>
+            <td><span class="source-tag">DEFRA 2025 ✓</span></td>
+            <td>DEFRA 2025 Local bus (not London), per passenger-km. Avg occupancy ~30. Giá trị cũ 0.089 trong research không phải từ DEFRA 2025.</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-ev"></span></td>
+            <td>Xe buýt điện <span class="status-new">MỚI</span></td>
+            <td class="highlight-cell">0.000</td>
+            <td><span class="source-tag">Định nghĩa TTW</span></td>
+            <td>Metro TP.Thủ Đức và các tuyến bus điện mới của TP.HCM</td>
+          </tr>
+          <!-- Taxi -->
+          <tr>
+            <td><span class="vehicle-icon vi-other"></span></td>
+            <td>Taxi / Grab <span class="status-new">MỚI</span></td>
+            <td class="highlight-cell">0.1486</td>
+            <td><span class="source-tag">DEFRA 2025 ✓</span></td>
+            <td>DEFRA 2025 Regular taxi, per passenger-km. Avg occupancy thấp hơn xe buýt. Giá trị 0.150 trong research gốc ≈ DEFRA 0.149 — khớp tốt.</td>
+          </tr>
+          <!-- Tàu -->
+          <tr>
+            <td><span class="vehicle-icon vi-train"></span></td>
+            <td>MRT / Tàu điện metro</td>
+            <td class="highlight-cell">0.0286</td>
+            <td><span class="source-tag">DEFRA 2025 ✓</span></td>
+            <td>DEFRA 2025 Light rail and tram, per passenger-km. HCM Metro Line 1. Giá trị cũ 0.006 trong research KHÔNG phải từ DEFRA 2025 (DEFRA 2025 = 0.0286).</td>
+          </tr>
+          <tr>
+            <td><span class="vehicle-icon vi-train"></span></td>
+            <td>Tàu hoả diesel <span class="status-new">MỚI</span></td>
+            <td class="highlight-cell">0.120</td>
+            <td><span class="source-tag">GHG Protocol</span></td>
+            <td>Tàu hỏa khu vực, đường sắt Bắc Nam. GHG Protocol: 0.120 pax-km. DEFRA 2025 không có hệ số riêng cho diesel train.</td>
+          </tr>
+          <!-- Đi bộ -->
+          <tr>
+            <td><span class="vehicle-icon vi-other"></span></td>
+            <td>Đi bộ</td>
+            <td class="highlight-cell">0.000</td>
+            <td><span class="source-tag">Định nghĩa</span></td>
+            <td>Không phát thải. Đã có trong FJCU.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Điểm nổi bật của dataset mới</h3>
+    <ul>
+      <li><strong>5 loại phương tiện mới:</strong> Xe máy điện, ô tô nhỏ/trung/lớn (tách riêng), ô tô hybrid, ô tô điện, xe buýt điện, taxi/Grab, tàu hoả diesel</li>
+      <li><strong>Tách ô tô theo dung tích:</strong> Thay vì dùng chung 0.115, user chọn đúng loại xe → tính toán chính xác hơn</li>
+      <li><strong>Xe điện: TTW = 0:</strong> Phản ánh đúng — xe điện không phát thải ống xả. Nếu user muốn tính cả điện, có thể bổ sung ở V2 (grid emission ~0.5 kg/kWh cho VN)</li>
+      <li><strong>Xe buýt: per-passenger:</strong> Khuyến khích dùng phương tiện công cộng — 1 người đi xe buýt phát thải 0.1253 kg/km (DEFRA 2025 verified), thấp hơn ô tô nhỏ 0.1431 và xe máy 0.085 (per veh-km).</li>
+      <li><strong>Tất cả đều tuân thủ ISO 14064-1:2018 và ISO 14067:2018</strong></li>
+      <li><strong>Lưu ý phương pháp luận — Xe máy:</strong> Sử dụng ICCT Asia 0.085 thay vì DEFRA 2025 0.1137 vì DEFRA phản ánh UK fleet (xe 500cc+, mục đích giải trí), trong khi VN chủ yếu là xe 125-150cc phục vụ di chuyển. ICCT Asia 0.085 là real-world data cross-validated với ADB SEA 0.080. Nguyên tắc conservative: chọn giá trị phản ánh thực tế VN fleet, không dùng giá trị global không phù hợp.</li>
+    </ul>
+
+    <h3>Code snippet cho app (TypeScript)</h3>
+<pre style="background:var(--code-bg); color:var(--code-text); border-radius:8px; padding:20px; overflow-x:auto; font-family:'Courier New',monospace; font-size:12.5px; line-height:1.7; margin:12px 0;">
+<span style="color:#7cb899;">// emissionFactors.ts — AirGuard MVP</span>
+
+<span style="color:#82aaff;">export const</span> EMISSION_FACTORS_TTW = {
+  <span style="color:#a8d8b9;">motorbike</span>:     { ef: <span style="color:#ffd700;">0.085</span>, label: <span style="color:#c3e88d;">"Xe máy xăng"</span>, unit: <span style="color:#c3e88d;">"kg CO2/veh-km"</span>, icon: <span style="color:#c3e88d;">"🛵"</span>, color: <span style="color:#c3e88d;">"#f59e0b"</span> },  <span style="color:#7cb899;">// ICCT Asia 2024 — VN/SEA fleet (DEFRA 2025 0.1137 for reference only)</span>
+  <span style="color:#a8d8b9;">motorbike_ev</span>: { ef: <span style="color:#ffd700;">0.000</span>, label: <span style="color:#c3e88d;">"Xe máy điện"</span>, unit: <span style="color:#c3e88d;">"kg CO2/veh-km"</span>, icon: <span style="color:#c3e88d;">"⚡"</span>, color: <span style="color:#c3e88d;">"#22c55e"</span>, isEV: <span style="color:#c3e88d;">true</span> },
+  <span style="color:#a8d8b9;">car_small</span>:    { ef: <span style="color:#ffd700;">0.1431</span>, label: <span style="color:#c3e88d;">"Ô tô nhỏ (&lt;1.5L)"</span>, unit: <span style="color:#c3e88d;">"kg CO2/veh-km"</span>, icon: <span style="color:#c3e88d;">"🚗"</span>, color: <span style="color:#c3e88d;">"#40916c"</span> },
+  <span style="color:#a8d8b9;">car_medium</span>:   { ef: <span style="color:#ffd700;">0.1747</span>, label: <span style="color:#c3e88d;">"Ô tô trung (1.5–2.5L)"</span>, unit: <span style="color:#c3e88d;">"kg CO2/veh-km"</span>, icon: <span style="color:#c3e88d;">"🚙"</span>, color: <span style="color:#c3e88d;">"#40916c"</span> },
+  <span style="color:#a8d8b9;">car_large</span>:    { ef: <span style="color:#ffd700;">0.2683</span>, label: <span style="color:#c3e88d;">"Ô tô lớn (&gt;2.5L)"</span>, unit: <span style="color:#c3e88d;">"kg CO2/veh-km"</span>, icon: <span style="color:#c3e88d;">"🚘"</span>, color: <span style="color:#c3e88d;">"#40916c"</span> },
+  <span style="color:#a8d8b9;">car_diesel</span>:   { ef: <span style="color:#ffd700;">0.1730</span>, label: <span style="color:#c3e88d;">"Ô tô diesel"</span>, unit: <span style="color:#c3e88d;">"kg CO2/veh-km"</span>, icon: <span style="color:#c3e88d;">"🚕"</span>, color: <span style="color:#c3e88d;">"#40916c"</span> },
+  <span style="color:#a8d8b9;">car_hybrid</span>:   { ef: <span style="color:#ffd700;">0.1283</span>, label: <span style="color:#c3e88d;">"Ô tô hybrid"</span>, unit: <span style="color:#c3e88d;">"kg CO2/veh-km"</span>, icon: <span style="color:#c3e88d;">"🚙"</span>, color: <span style="color:#c3e88d;">"#40916c"</span> },
+  <span style="color:#a8d8b9;">car_ev</span>:       { ef: <span style="color:#ffd700;">0.000</span>, label: <span style="color:#c3e88d;">"Ô tô điện"</span>, unit: <span style="color:#c3e88d;">"kg CO2/veh-km"</span>, icon: <span style="color:#c3e88d;">"🚘"</span>, color: <span style="color:#c3e88d;">"#22c55e"</span>, isEV: <span style="color:#c3e88d;">true</span> },
+  <span style="color:#a8d8b9;">bus_diesel</span>:   { ef: <span style="color:#ffd700;">0.1253</span>, label: <span style="color:#c3e88d;">"Xe buýt diesel"</span>, unit: <span style="color:#c3e88d;">"kg CO2/pax-km"</span>, icon: <span style="color:#c3e88d;">"🚌"</span>, color: <span style="color:#c3e88d;">"#d97706"</span> },
+  <span style="color:#a8d8b9;">bus_ev</span>:       { ef: <span style="color:#ffd700;">0.000</span>, label: <span style="color:#c3e88d;">"Xe buýt điện"</span>, unit: <span style="color:#c3e88d;">"kg CO2/pax-km"</span>, icon: <span style="color:#c3e88d;">"🚌"</span>, color: <span style="color:#c3e88d;">"#22c55e"</span>, isEV: <span style="color:#c3e88d;">true</span> },
+  <span style="color:#a8d8b9;">taxi</span>:         { ef: <span style="color:#ffd700;">0.1486</span>, label: <span style="color:#c3e88d;">"Taxi / Grab"</span>, unit: <span style="color:#c3e88d;">"kg CO2/pax-km"</span>, icon: <span style="color:#c3e88d;">"🚖"</span>, color: <span style="color:#c3e88d;">"#6b7280"</span> },
+  <span style="color:#a8d8b9;">mrt</span>:          { ef: <span style="color:#ffd700;">0.0286</span>, label: <span style="color:#c3e88d;">"MRT / Tàu điện"</span>, unit: <span style="color:#c3e88d;">"kg CO2/pax-km"</span>, icon: <span style="color:#c3e88d;">"🚇"</span>, color: <span style="color:#c3e88d;">"#7c3aed"</span> },
+  <span style="color:#a8d8b9;">train_diesel</span>: { ef: <span style="color:#ffd700;">0.120</span>, label: <span style="color:#c3e88d;">"Tàu hoả diesel"</span>, unit: <span style="color:#c3e88d;">"kg CO2/pax-km"</span>, icon: <span style="color:#c3e88d;">"🚂"</span>, color: <span style="color:#c3e88d;">"#7c3aed"</span> },
+  <span style="color:#a8d8b9;">walk</span>:         { ef: <span style="color:#ffd700;">0.000</span>, label: <span style="color:#c3e88d;">"Đi bộ"</span>, unit: <span style="color:#c3e88d;">"kg CO2/pax-km"</span>, icon: <span style="color:#c3e88d;">"🚶"</span>, color: <span style="color:#c3e88d;">"#6b7280"</span> },
+} <span style="color:#7cb899;">as const</span>
+
+<span style="color:#82aaff;">export type</span> VehicleType = keyof typeof EMISSION_FACTORS_TTW
+
+<span style="color:#82aaff;">export function</span> <span style="color:#82aaff;">calculateEmission</span>(vehicle: VehicleType, distanceKm: number): number {
+  <span style="color:#82aaff;">const</span> ef = EMISSION_FACTORS_TTW[vehicle].ef
+  <span style="color:#82aaff;">return</span> Math.round(distanceKm * ef * <span style="color:#ffd700;">100</span>) / <span style="color:#ffd700;">100</span>  <span style="color:#7cb899;">// 2 decimal places</span>
+}
+</pre>
+  </div>
+
+  <!-- SECTION 6: Carbon Equivalents -->
+  <div class="section" id="section-6">
+    <h2><span class="section-number">6</span>Carbon Equivalents — Dataset quy đổi</h2>
+
+    <h3>6.1 Giới thiệu</h3>
+    <p>Khi người dùng nhìn thấy kết quả <strong>1.2 kg CO2</strong>, con số này thường khó hình dung. AirGuard sử dụng <strong>Carbon Equivalents</strong> — quy đổi lượng khí thải thành những hình ảnh quen thuộc trong đời sống hàng ngày — giúp người dùng dễ dàng hiểu và so sánh tác động carbon của mình.</p>
+    <p>Công thức quy đổi:</p>
+    <div class="formula-box">
+      <div class="formula-label">Equation 3 — Carbon Equivalent Conversion</div>
+      <div class="formula-main">
+        <span class="formula-var">N</span><sub>equiv</sub> =
+        <span class="formula-var">E</span><sub>trip</sub> /
+        <span class="formula-var">EF</span><sub>item</sub>
+      </div>
+      <div class="formula-note">
+        Trong đó: E_trip = kg CO2 từ chuyến đi | EF_item = kg CO2e/sản phẩm
+      </div>
+    </div>
+    <p>Ví dụ: 0.720 kg CO2 / 0.110 kg CO2e/trà sữa 250ml = <strong>6.5 ly trà sữa</strong>.</p>
+
+    <h3>6.2 Dataset quy đổi từ FJCU / Taiwan EPA CFP Database</h3>
+    <p>Bộ hệ số quy đổi được chiết xuất từ <strong>Carbon Footprint Calculation Platform của Taiwan EPA</strong> (nền tảng CFP, `碳係數明細-全.pdf` — 1,979 trang), kết hợp dữ liệu từ ITRI và FJCU Carbon Footprint Summer Camp 2024. Tất cả giá trị theo phạm vi <strong>Cradle-to-Grave</strong> trừ trứng (Cradle-to-Gate).</p>
+
+    <h4>Đồ uống (Beverages)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Sản phẩm</th>
+            <th class="center">Quy cách</th>
+            <th class="center">kg CO2e</th>
+            <th>Nguồn</th>
+            <th>Ghi chú</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="center mono">1</td>
+            <td>Trà sữa (Milk tea)</td>
+            <td class="center mono">250ml, Tetra Pak</td>
+            <td class="center mono highlight-cell">0.110</td>
+            <td>Taiwan EPA CFP (Page 507)</td>
+            <td>Base reference cho app. Tương đương 1 ly trà sữa thường</td>
+          </tr>
+          <tr>
+            <td class="center mono">2</td>
+            <td>Trà sữa (Milk tea)</td>
+            <td class="center mono">300ml, Tetra Pak</td>
+            <td class="center mono">0.130</td>
+            <td>Taiwan EPA CFP (Page 509)</td>
+            <td>Size lớn hơn → emission cao hơn 18%</td>
+          </tr>
+          <tr>
+            <td class="center mono">3</td>
+            <td>Trà sữa (Milk tea)</td>
+            <td class="center mono">375ml, Tetra Pak</td>
+            <td class="center mono">0.160</td>
+            <td>Taiwan EPA CFP (Page 511)</td>
+            <td>Size XL, phổ biến tại VN</td>
+          </tr>
+          <tr>
+            <td class="center mono">4</td>
+            <td>Trà đen (Black tea)</td>
+            <td class="center mono">250ml, Tetra Pak</td>
+            <td class="center mono">0.095</td>
+            <td>Taiwan EPA CFP (Page 513)</td>
+            <td>Không sữa → thấp hơn trà sữa 14%</td>
+          </tr>
+          <tr>
+            <td class="center mono">5</td>
+            <td>Trà xanh (Green tea)</td>
+            <td class="center mono">250ml, Tetra Pak</td>
+            <td class="center mono">0.090</td>
+            <td>Taiwan EPA CFP (Page 519)</td>
+            <td>Thấp nhất trong các loại trà</td>
+          </tr>
+          <tr>
+            <td class="center mono">6</td>
+            <td>Cà phê đen (Black coffee)</td>
+            <td class="center mono">1 tách (~250ml)</td>
+            <td class="center mono">0.304</td>
+            <td>Taiwan EPA CFP (Page 1788)</td>
+            <td>Carbon cao hơn trà ~3x vì quy trình rang sấy cà phê</td>
+          </tr>
+          <tr>
+            <td class="center mono">7</td>
+            <td>Nước ngọt (Coca-Cola)</td>
+            <td class="center mono">600ml, PET</td>
+            <td class="center mono">0.398</td>
+            <td>Taiwan EPA CFP (Page 1037)</td>
+            <td>Production + packaging PET. Đã có trong slide FJCU (1.29 kg/set)</td>
+          </tr>
+          <tr>
+            <td class="center mono">8</td>
+            <td>Nước đóng chai (Bottled water)</td>
+            <td class="center mono">330ml, PET</td>
+            <td class="center mono">0.150</td>
+            <td>Taiwan EPA CFP (Page 1688)</td>
+            <td>6 lần đắt hơn về carbon so với nước máy</td>
+          </tr>
+          <tr>
+            <td class="center mono">9</td>
+            <td>Bia Đài Loan (Taiwan Beer)</td>
+            <td class="center mono">600ml, chai</td>
+            <td class="center mono">0.330</td>
+            <td>Taiwan EPA CFP (Page 567)</td>
+            <td>Gold medal variant. Bia địa phương thấp hơn Coke</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Đồ ăn &amp; sản phẩm tiêu dùng (Food &amp; Consumer goods)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Sản phẩm</th>
+            <th class="center">Quy cách</th>
+            <th class="center">kg CO2e</th>
+            <th>Nguồn</th>
+            <th>Ghi chú</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="center mono">10</td>
+            <td>Trứng gà (Fresh egg)</td>
+            <td class="center mono">1 quả (pcs)</td>
+            <td class="center mono highlight-cell">0.105</td>
+            <td>Taiwan EPA CFP (Page 1168)</td>
+            <td>Thấp — trứng là một trong những protein có carbon thấp nhất</td>
+          </tr>
+          <tr>
+            <td class="center mono">11</td>
+            <td>Bánh pineapple cake (Bánh dứa)</td>
+            <td class="center mono">1 cái (pcs)</td>
+            <td class="center mono">0.194</td>
+            <td>Taiwan EPA CFP (Page 1852)</td>
+            <td>Đặc sản Đài Loan — quy đổi thú vị vì có nguồn gốc nông nghiệp</td>
+          </tr>
+          <tr>
+            <td class="center mono">12</td>
+            <td>Bánh caramel pudding</td>
+            <td class="center mono">1 phần (piece)</td>
+            <td class="center mono">0.340</td>
+            <td>Taiwan EPA CFP (Page 1869)</td>
+            <td>Thường thấy ở cửa hàng tiện lợi Đài Loan</td>
+          </tr>
+          <tr>
+            <td class="center mono">13</td>
+            <td>Khoai lang nướng (Baked sweet potato)</td>
+            <td class="center mono">1 hộp (box)</td>
+            <td class="center mono">0.656</td>
+            <td>Taiwan EPA CFP (Page 1279)</td>
+            <td>Nguồn gốc nông nghiệp — carbon cao hơn trà/đồ uống đóng gói</td>
+          </tr>
+          <tr>
+            <td class="center mono">14</td>
+            <td>Mứt cam Hakka</td>
+            <td class="center mono">500ml, chai</td>
+            <td class="center mono">0.500</td>
+            <td>Taiwan EPA CFP (Page 1145)</td>
+            <td>Sản phẩm chuyển đổi nông sản — minh họa chain chuyển đổi</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>6.3 Carbon equivalents cho thiết bị công nghệ</h3>
+    <p>Các thiết bị điện tử là điểm quy đổi phổ biến nhất trong các ứng dụng carbon tracking. Dữ liệu từ báo cáo môi trường của Apple (Apple Environmental Reports) cho thấy:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Sản phẩm</th>
+            <th class="center">kg CO2e</th>
+            <th>Nguồn</th>
+            <th>Ghi chú</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>iPhone 15 Pro (production only)</td>
+            <td class="center mono">~66 kg CO2e</td>
+            <td>Apple Environmental Report 2024 <span class="status-new">CẦN XÁC THỰC</span></td>
+            <td>Production chiếm ~80% tổng lifecycle. Placeholder — cần tra cứu chính xác</td>
+          </tr>
+          <tr>
+            <td>MacBook Air 13" (production only)</td>
+            <td class="center mono">~200 kg CO2e</td>
+            <td>Apple Environmental Report 2024 <span class="status-new">CẦN XÁC THỰC</span></td>
+            <td>Placeholder. Laptop có carbon cao hơn phone ~3x</td>
+          </tr>
+          <tr>
+            <td>Sạc iPhone (~20W) — production</td>
+            <td class="center mono">~2 kg CO2e</td>
+            <td>Ecoinvent 3.9 / GHG Protocol <span class="status-new">CẦN XÁC THỰC</span></td>
+            <td>Để quy đổi "X lần sạc iPhone" — cần thêm dữ liệu</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warning">
+      <div class="callout-title">Data pending verification</div>
+      <p style="font-size:13.5px; margin:0;">Dữ liệu iPhone/MacBook ở trên là <strong>placeholder dựa trên ước tính</strong> từ xu hướng Apple Environmental Reports. Cần được xác thực chính xác trước khi đưa vào production. Nếu bạn có link chính thức từ Apple, vui lòng chia sẻ để cập nhật.</td>
+    </div>
+
+    <h3>6.4 Ví dụ sử dụng trong app</h3>
+    <p>Khi người dùng đi xe máy 10km:</p>
+    <div class="formula-box">
+      <div class="formula-label">Example — Motorbike trip (10 km)</div>
+      <div class="formula-note" style="text-align:left; line-height:2.2; font-size:13px;">
+        E_trip = 10 km × 0.085 kg/km = <strong>0.85 kg CO2</strong> (ICCT Asia 2024)<br><br>
+        ÷ Trà sữa 250ml → <strong>7.7 ly</strong> (0.85 / 0.110)<br>
+        ÷ Trứng → <strong>8.1 quả</strong> (0.85 / 0.105)<br>
+        ÷ Nước ngọt 600ml → <strong>2.1 chai</strong> (0.85 / 0.398)<br>
+        ÷ Bánh pineapple cake → <strong>4.4 cái</strong> (0.85 / 0.194)<br>
+        ÷ Cà phê đen → <strong>2.8 tách</strong> (0.85 / 0.304)<br>
+        ÷ Nước đóng chai 330ml → <strong>5.7 chai</strong> (0.85 / 0.150)
+      </div>
+    </div>
+
+    <h3>6.5 Code snippet cho app (TypeScript)</h3>
+<pre style="background:var(--code-bg); color:var(--code-text); border-radius:8px; padding:20px; overflow-x:auto; font-family:'Courier New',monospace; font-size:12.5px; line-height:1.7; margin:12px 0;">
+<span style="color:#7cb899;">// carbonEquivalents.ts — AirGuard MVP</span>
+
+<span style="color:#82aaff;">export const</span> CARBON_EQUIVALENTS = {
+  <span style="color:#a8d8b9;">milkTea_250</span>:  { ef: <span style="color:#ffd700;">0.110</span>, label: <span style="color:#c3e88d;">"Trà sữa 250ml"</span>,  unit: <span style="color:#c3e88d;">"ly"</span>,     source: <span style="color:#c3e88d;">"Taiwan EPA CFP (p.507)"</span> },
+  <span style="color:#a8d8b9;">blackTea_250</span>: { ef: <span style="color:#ffd700;">0.095</span>, label: <span style="color:#c3e88d;">"Trà đen 250ml"</span>, unit: <span style="color:#c3e88d;">"ly"</span>,     source: <span style="color:#c3e88d;">"Taiwan EPA CFP (p.513)"</span> },
+  <span style="color:#a8d8b9;">greenTea_250</span>: { ef: <span style="color:#ffd700;">0.090</span>, label: <span style="color:#c3e88d;">"Trà xanh 250ml"</span>, unit: <span style="color:#c3e88d;">"ly"</span>,     source: <span style="color:#c3e88d;">"Taiwan EPA CFP (p.519)"</span> },
+  <span style="color:#a8d8b9;">coffee</span>:       { ef: <span style="color:#ffd700;">0.304</span>, label: <span style="color:#c3e88d;">"Cà phê đen"</span>,     unit: <span style="color:#c3e88d;">"tách"</span>,   source: <span style="color:#c3e88d;">"Taiwan EPA CFP (p.1788)"</span> },
+  <span style="color:#a8d8b9;">coke_600</span>:     { ef: <span style="color:#ffd700;">0.398</span>, label: <span style="color:#c3e88d;">"Nước ngọt 600ml"</span>, unit: <span style="color:#c3e88d;">"chai"</span>,  source: <span style="color:#c3e88d;">"Taiwan EPA CFP (p.1037)"</span> },
+  <span style="color:#a8d8b9;">water_330</span>:    { ef: <span style="color:#ffd700;">0.150</span>, label: <span style="color:#c3e88d;">"Nước đóng chai 330ml"</span>, unit: <span style="color:#c3e88d;">"chai"</span>, source: <span style="color:#c3e88d;">"Taiwan EPA CFP (p.1688)"</span> },
+  <span style="color:#a8d8b9;">egg</span>:          { ef: <span style="color:#ffd700;">0.105</span>, label: <span style="color:#c3e88d;">"Trứng gà"</span>,        unit: <span style="color:#c3e88d;">"quả"</span>,  source: <span style="color:#c3e88d;">"Taiwan EPA CFP (p.1168)"</span> },
+  <span style="color:#a8d8b9;">pineappleCake</span>:{ ef: <span style="color:#ffd700;">0.194</span>, label: <span style="color:#c3e88d;">"Bánh dứa"</span>,         unit: <span style="color:#c3e88d;">"cái"</span>,  source: <span style="color:#c3e88d;">"Taiwan EPA CFP (p.1852)"</span> },
+} <span style="color:#7cb899;">as const</span>
+
+<span style="color:#82aaff;">export type</span> EquivalentType = keyof typeof CARBON_EQUIVALENTS
+
+<span style="color:#82aaff;">export function</span> <span style="color:#82aaff;">toEquivalents</span>(co2Kg: number, item: EquivalentType): string {
+  <span style="color:#82aaff;">const</span> count = Math.round(co2Kg / CARBON_EQUIVALENTS[item].ef)
+  <span style="color:#82aaff;">const</span> { label, unit } = CARBON_EQUIVALENTS[item]
+  <span style="color:#82aaff;">return</span> <span style="color:#c3e88d;">`</span><span style="color:#ffd700;">${count}</span> <span style="color:#c3e88d;">${unit} ${label}`</span><span style="color:#c3e88d;">`</span>
+}
+</pre>
+
+    <h3>6.6 Kế hoạch mở rộng</h3>
+    <ul>
+      <li><strong>Xác thực iPhone/MacBook:</strong> Tra cứu chính xác Apple Environmental Reports 2024 cho iPhone 15 series và MacBook Air M3. Priority: cao — là equivalent phổ biến nhất.</li>
+      <li><strong>Tree equivalent:</strong> Tìm hệ số carbon hấp thụ của cây xanh tại VN (theo IPCC, 1 cây bạch đàn hấp thụ ~21.7 kg CO2/năm). Cho phép quy đổi: X km xe máy = trồng Y cây.</li>
+      <li><strong>Thêm sản phẩm VN:</strong> Bổ sung dữ liệu từ các nhãn hàng Việt Nam (Vinamilk, TH True Milk, Masan) nếu có CFP certified.</li>
+      <li><strong>Interactive display:</strong> V2 hiển thị 3-4 equivalents cùng lúc, người dùng chọn loại quy đổi ưa thích.</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 7: Áp dụng HCM/VN -->
+  <div class="section" id="section-7">
+    <h2><span class="section-number">7</span>Áp dụng cho HCM &amp; Việt Nam</h2>
+
+    <h3>Đặc điểm giao thông HCM</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Đặc điểm</th>
+            <th>Giá trị</th>
+            <th>Tác động đến EF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Đăng ký xe máy</td>
+            <td class="mono">>9 triệu xe</td>
+            <td>Xe máy chiếm ưu thế tuyệt đối. EF xe máy là quan trọng nhất</td>
+          </tr>
+          <tr>
+            <td>Đăng ký ô tô</td>
+            <td class="mono">~800,000 xe</td>
+            <td>Tăng trưởng nhanh. Cần tách theo loại xe để tính chính xác</td>
+          </tr>
+          <tr>
+            <td>Tốc độ trung bình giờ cao điểm</td>
+            <td class="mono">&lt;20 km/h</td>
+            <td>Kẹt xe nghiêm trọng → idle emission quan trọng (V2)</td>
+          </tr>
+          <tr>
+            <td>HCM Metro Line 1</td>
+            <td class="mono">Hoạt động 2024</td>
+            <td>EF MRT = 0.006 per-pax rất thấp → khuyến khích dùng metro</td>
+          </tr>
+          <tr>
+            <td>Bus TP.HCM</td>
+            <td class="mono">~1,900 tuyến</td>
+            <td>Xe buýt diesel truyền thống: 0.089 pax-km — vẫn tốt hơn xe máy đi riêng</td>
+          </tr>
+          <tr>
+            <td>Xe máy điện / ô tô điện</td>
+            <td class="mono">Tăng trưởng mạnh</td>
+            <td>VF (VinFast) bán chạy → cần hỗ trợ xe điện với EF = 0</td>
+          </tr>
+          <tr>
+            <td>Taxi / Grab</td>
+            <td class="mono">>50,000 xe</td>
+            <td>Rất phổ biến — cần hệ số riêng (0.150, thấp hơn ô tô riêng vì chia sẻ)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Bảng budget CO2 cho người dùng</h3>
+    <p>Dataset cần đi kèm với budget cá nhân để người dùng biết mình đang trong hay vượt ngưỡng:</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Chỉ tiêu</th>
+            <th class="center">Giá trị</th>
+            <th>Nguồn</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Budget toàn cầu 1.5°C</td>
+            <td class="center mono highlight-cell">6.8 kg CO2/ngày</td>
+            <td>IPCC AR6, 2021</td>
+          </tr>
+          <tr>
+            <td>Budget VN (ước tính)</td>
+            <td class="center mono">~9.6 kg CO2/ngày</td>
+            <td>IEA CO2 Emissions 2023 (~3.5 t/năm)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <div class="callout-title">Cách sử dụng trong app</div>
+      <p style="font-size:13.5px; margin:0;">Budget VN (~9.6 kg/ngày) được dùng làm mặc định. Budget toàn cầu (6.8 kg/ngày) hiển thị như tham chiếu. Khi tổng CO2 vượt budget, hiển thị cảnh báo. Tất cả giá trị đều là ước tính sơ bộ (preliminary, approximately) — không phải con số chính xác tuyệt đối.</p>
+    </div>
+
+    <h3>Kế hoạch mở rộng V2</h3>
+    <ul>
+      <li><strong>Idle-time emission:</strong> Tích hợp Google Maps Distance Matrix API → tính t<sub>idle</sub> = duration<sub>traffic</sub> − duration<sub>freeflow</sub> → dùng Equation 2</li>
+      <li><strong>Well-to-Wheel (WTW):</strong> Bổ sung hệ số khai thác nhiên liệu — cao hơn TTW ~15–25%. Ví dụ: xe máy WTW ≈ 0.085 × 1.20 ≈ 0.102 kg/pax-km (base TTW từ ICCT Asia 0.085)</li>
+      <li><strong>Xe tải nhẹ:</strong> Hệ số cho light commercial vehicles (LCV) — ngày càng phổ biến cho giao hàng</li>
+      <li><strong>Chuyến bay nội địa:</strong> Hệ số cho máy bay (không khả thi cho HCM nhưng cần cho chuyến bay dài)</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 7: App Description -->
+  <div class="section" id="section-8">
+    <h2><span class="section-number">8</span>Thuyết minh ứng dụng AirGuard</h2>
+
+    <h3>7.1 Tổng quan ý tưởng</h3>
+    <p><strong>AirGuard</strong> là một ứng dụng di động tối giản nhưng mạnh mẽ, được thiết kế để cá nhân hóa việc theo dõi dấu chân carbon từ hoạt động giao thông đô thị ngay trên thiết bị của người dùng. Với triết lý <strong>"Invisible Technology, Visible Impact"</strong>, AirGuard cho phép người dùng đo lường chính xác lượng khí thải CO2 phát sinh theo thời gian thực chỉ qua ba thao tác chạm: <em>Bắt đầu chuyến đi</em>, <em>chọn phương tiện</em> và <em>Kết thúc</em>.</p>
+    <p>Ứng dụng tận dụng dữ liệu GPS để tính toán quãng đường và tích hợp bộ hệ số phát thải chuẩn hóa theo ISO 14067:2018 (từ nền tảng ITRI/FJCU), giúp tính toán trực tiếp kết quả ngay tại local mà không cần đến hệ thống backend hay kết nối API phức tạp. Để biến những con số khô khan thành thông điệp dễ hiểu, AirGuard quy đổi lượng khí thải ra những hình ảnh so sánh trực quan, chẳng hạn như "tương đương với số lần sạc iPhone", giúp người dùng nhận thức rõ ràng tác động của mình tới môi trường.</p>
+
+    <div class="callout">
+      <div class="callout-title">Điểm khác biệt cốt lõi</div>
+      <p style="font-size:13.5px; margin:0;">Vì mọi tính toán đều diễn ra local trên máy, AirGuard đảm bảo <strong>quyền riêng tư tuyệt đối</strong> về lộ trình di chuyển của người dùng — một điểm cộng lớn so với các ứng dụng tracking hiện nay. Không có dữ liệu GPS nào được gửi lên server, không có backend, không có API bên thứ ba.</p>
+    </div>
+
+    <h3>7.2 Kiến trúc kỹ thuật</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Thành phần</th>
+            <th>Mô tả</th>
+            <th>Công nghệ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Computation</td>
+            <td>Tất cả tính toán CO2 chạy local trên thiết bị</td>
+            <td>Expo / React Native</td>
+          </tr>
+          <tr>
+            <td>Emission Factors</td>
+            <td>Hardcode trực tiếp vào app (DEFRA 2025 / ITRI)</td>
+            <td>TypeScript constants</td>
+          </tr>
+          <tr>
+            <td>GPS / Location</td>
+            <td>Thu thập quãng đường di chuyển (MVP: manual distance input)</td>
+            <td>expo-location (V2)</td>
+          </tr>
+          <tr>
+            <td>Local Storage</td>
+            <td>Lưu lịch sử chuyến đi trên thiết bị</td>
+            <td>AsyncStorage / SQLite</td>
+          </tr>
+          <tr>
+            <td>No Backend</td>
+            <td>Không server, không cloud, không third-party API</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Privacy</td>
+            <td>Dữ liệu lộ trình không rời thiết bị người dùng</td>
+            <td>On-device only</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">MVP vs. V2 Architecture</div>
+      <p style="font-size:13.5px; margin:0;"><strong>MVP (Hiện tại):</strong> Người dùng nhập quãng đường thủ công. Tính toán: E = d x EF (Equation 1). Dữ liệu lưu local. Không cần kết nối internet.<br><br><strong>V2 (Tương lai):</strong> Tích hợp Google Maps Distance Matrix API để lấy quãng đường tự động + tính idle-time (kẹt xe). Tích hợp Firebase để đồng bộ across devices.</p>
+    </div>
+
+    <h3>7.3 Tính năng nổi bật</h3>
+    <div class="comparison-grid">
+      <div class="compare-card">
+        <div class="source-name">3-Tap Trip Logging</div>
+        <p style="font-size:13px; color:var(--text-secondary);">Bắt đầu - Chọn phương tiện - Kết thúc. Giao diện tối giản, không cần đăng ký.</p>
+      </div>
+      <div class="compare-card">
+        <div class="source-name">Carbon Equivalents</div>
+        <p style="font-size:13px; color:var(--text-secondary);">Quy đổi CO2 ra hình ảnh dễ hiểu: số lần sạc iPhone, cây xanh cần thiết, km đi bộ tương đương.</p>
+      </div>
+      <div class="compare-card">
+        <div class="source-name">Daily Budget Tracker</div>
+        <p style="font-size:13px; color:var(--text-secondary);">So sánh tổng CO2 ngày với budget VN (~9.6 kg/ngày). Cảnh báo khi vượt ngưỡng an toàn khí hậu.</p>
+      </div>
+      <div class="compare-card">
+        <div class="source-name">ISO 14067 Compliant</div>
+        <p style="font-size:13px; color:var(--text-secondary);">Hệ số phát thải tuân thủ tiêu chuẩn quốc tế, có nguồn trích dẫn rõ ràng (DEFRA 2025, ITRI/FJCU).</p>
+      </div>
+      <div class="compare-card">
+        <div class="source-name">Green Score</div>
+        <p style="font-size:13px; color:var(--text-secondary);">Chỉ số điểm xanh cá nhân, streak ngày liên tiếp sử dụng phương tiện thấp-carbon.</p>
+      </div>
+      <div class="compare-card">
+        <div class="source-name">Zero-Config Setup</div>
+        <p style="font-size:13px; color:var(--text-secondary);">Không cần tạo tài khoản, không cần internet, không quảng cáo. Mở app là dùng được ngay.</p>
+      </div>
+    </div>
+
+    <h3>7.4 Luồng người dùng (User Flow)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Bước</th>
+            <th>Hành động</th>
+            <th>Hệ thống xử lý</th>
+            <th>Kết quả</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="center" style="font-weight:700;">1</td>
+            <td>Người dùng nhấn <strong>Bắt đầu chuyến đi</strong></td>
+            <td>App khởi tạo session, ghi timestamp bắt đầu</td>
+            <td>Trip active</td>
+          </tr>
+          <tr>
+            <td class="center" style="font-weight:700;">2</td>
+            <td>Người dùng <strong>chọn phương tiện</strong> (danh sách 13 loại)</td>
+            <td>Hệ thống load EF tương ứng từ local constants</td>
+            <td>EF loaded</td>
+          </tr>
+          <tr>
+            <td class="center" style="font-weight:700;">3</td>
+            <td>Người dùng nhập <strong>quãng đường</strong> (km) hoặc GPS tracking (V2)</td>
+            <td>Tính E = d x EF_pax (Equation 1, Section 3)</td>
+            <td>CO2 calculated</td>
+          </tr>
+          <tr>
+            <td class="center" style="font-weight:700;">4</td>
+            <td>Người dùng nhấn <strong>Kết thúc</strong></td>
+            <td>App hiển thị kết quả + carbon equivalents + cập nhật budget</td>
+            <td>Result displayed</td>
+          </tr>
+          <tr>
+            <td class="center" style="font-weight:700;">5</td>
+            <td>App lưu chuyến đi vào <strong>local storage</strong></td>
+            <td>Trip saved: timestamp, vehicle, distance, CO2, budget remaining</td>
+            <td>Trip logged</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>7.5 Privacy-by-Design</h3>
+    <p>Trong bối cảnh các ứng dụng giao thông hiện nay thu thập và bán dữ liệu vị trí cho bên thứ ba, AirGuard chọn hướng đi ngược lại:</p>
+    <ul>
+      <li><strong>Không backend:</strong> Mọi computation diễn ra trên thiết bị. Không có server để hack, không có database để breach.</li>
+      <li><strong>Không tracking:</strong> Không có SDK analytics, không có crash reporting gửi data ra ngoài.</li>
+      <li><strong>Không quyền truy cập mạng:</strong> MVP không cần internet — người dùng có thể tắt WiFi/data và vẫn dùng được bình thường.</li>
+      <li><strong>Dữ liệu do người dùng sở hữu:</strong> Lịch sử chuyến đi chỉ tồn tại trên thiết bị của họ. Họ có thể xóa bất cứ lúc nào.</li>
+    </ul>
+    <div class="callout warning">
+      <div class="callout-title">Thông điệp cho Ban giám khảo</div>
+      <p style="font-size:13.5px; margin:0;">Điểm mạnh cạnh tranh của AirGuard so với các ứng dụng carbon tracking hiện có (Carbon Footprint, Capture, Klima...) là <strong>Privacy-by-Design</strong>. Các ứng dụng này yêu cầu tạo tài khoản, kết nối cloud, và thu thập dữ liệu hành vi. AirGuard thì hoàn toàn ngược lại — lộ trình di chuyển là thông tin nhạy cảm, và chúng tôi không bao giờ đụng vào nó.</p>
+    </div>
+
+    <h3>7.6 Lộ trình phát triển (Roadmap)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Giai đoạn</th>
+            <th>Tính năng</th>
+            <th>Trạng thái</th>
+            <th>Ghi chú</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>MVP</strong></td>
+            <td>Manual trip logging, 13 vehicle types, local EF, CO2 calculation, daily budget, carbon equivalents</td>
+            <td><span class="status-new">MỚI</span></td>
+            <td>Không backend, không internet</td>
+          </tr>
+          <tr>
+            <td><strong>V2</strong></td>
+            <td>Google Maps Distance Matrix API, auto distance, idle-time calculation (Equation 2), Firebase sync</td>
+            <td>Lên kế hoạch</td>
+            <td>Cần API key, tăng accuracy</td>
+          </tr>
+          <tr>
+            <td><strong>V3</strong></td>
+            <td>Well-to-Wheel (WTW) calculation, domestic flight emission, light commercial vehicle (LCV), dark mode</td>
+            <td>Lên kế hoạch</td>
+            <td>Mở rộng phạm vi phương tiện</td>
+          </tr>
+          <tr>
+            <td><strong>V4</strong></td>
+            <td>Aggregated anonymized city-level data, dashboard cho chính quyền HCM, API for researchers</td>
+            <td>Nghiên cứu</td>
+            <td>Privacy-preserving aggregation</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 8: Stakeholder Analysis -->
+  <div class="section" id="section-9">
+    <h2><span class="section-number">9</span>Phân tích Stakeholders</h2>
+
+    <h3>8.1 Bảng tổng hợp các bên liên quan</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nhóm</th>
+            <th>Vai trò</th>
+            <th>Mối quan tâm chính</th>
+            <th>Giá trị AirGuard mang lại</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Người dùng cuối</strong><br><span style="font-size:12px; color:var(--text-secondary);">Primary</span></td>
+            <td>Người sử dụng ứng dụng để tracking CO2 cá nhân</td>
+            <td>Dễ dùng, bảo mật, hiểu được tác động carbon, tiết kiệm chi phí xăng</td>
+            <td>Công cụ đo lường chính xác, budget tracker, green score</td>
+          </tr>
+          <tr>
+            <td><strong>Cơ quan chính quyền</strong><br><span style="font-size:12px; color:var(--text-secondary);">Secondary</span></td>
+            <td>Người ra chính sách, quản lý giao thông và môi trường</td>
+            <td>Dữ liệu hành vi di chuyển, giảm phát thải GTVT, Net Zero 2050</td>
+            <td>Tham khảo hành vi người dùng (aggregated, anonymized), bằng chứng cho policy</td>
+          </tr>
+          <tr>
+            <td><strong>Ban giám khảo Hackathon</strong><br><span style="font-size:12px; color:var(--text-secondary);">Tertiary</span></td>
+            <td>Đánh giá tính khả thi, sáng tạo, tác động của giải pháp</td>
+            <td>Innovation, Feasibility, Scalability, Real-world Impact</td>
+            <td>Prototype hoàn chỉnh, scientific foundation, clear problem-solution fit</td>
+          </tr>
+          <tr>
+            <td><strong>Doanh nghiệp GTVT xanh</strong><br><span style="font-size:12px; color:var(--text-secondary);">Supporting</span></td>
+            <td>VinFast, Grab, các tuyến Metro HCM, đơn vị vận tải công cộng</td>
+            <td>Khuyến khích người dùng chọn phương tiện xanh, brand positioning</td>
+            <td>Nền tảng khuyến khích (in-app badges cho VinFast, Metro)</td>
+          </tr>
+          <tr>
+            <td><strong>NGO Môi trường</strong><br><span style="font-size:12px; color:var(--text-secondary);">Supporting</span></td>
+            <td>Tổ chức phi chính phủ về khí hậu và môi trường tại VN</td>
+            <td>Nâng cao nhận thức cộng đồng, đo lường tác động</td>
+            <td>Công cụ giáo dục, dashboard theo dõi CO2 cộng đồng</td>
+          </tr>
+          <tr>
+            <td><strong>Cộng đồng học thuật</strong><br><span style="font-size:12px; color:var(--text-secondary);">Supporting</span></td>
+            <td>ITRI, FJCU, các trường đại học VN, nhóm nghiên cứu khí hậu</td>
+            <td>Nguồn dữ liệu sơ cấp, nghiên cứu hành vi giao thông</td>
+            <td>Dataset emission factors được cross-validate, phương pháp luận rõ ràng</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>8.2 Stakeholder Mapping (Power x Interest Matrix)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th class="center">Low Interest (Ít quan tâm)</th>
+            <th class="center">High Interest (Quan tâm cao)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="center" style="font-weight:700; white-space:nowrap;">High Power<br>(Quyền lực cao)</td>
+            <td style="background:#f3f4f6; padding:16px;">
+              <strong>Monitor (Theo dõi)</strong><br>
+              <span style="font-size:12px; color:var(--text-secondary);">App Store / Google Play (duy trì chính sách), Doanh nghiệp công nghệ lớn (Apple/Google Maps API)</span>
+            </td>
+            <td style="background:#d4edda; padding:16px;">
+              <strong>Manage Closely (Quản lý chặt)</strong><br>
+              <span style="font-size:12px; color:var(--text-secondary);">Ban giám khảo, Cơ quan chính quyền HCM (Sở GTVT, Sở TN&MT)</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="center" style="font-weight:700; white-space:nowrap;">Low Power<br>(Quyền lực thấp)</td>
+            <td style="background:#f3f4f6; padding:16px;">
+              <strong>Minimal Effort (Ít nỗ lực)</strong><br>
+              <span style="font-size:12px; color:var(--text-secondary);">Truyền thông đại chúng (TV, báo), Tổ chức quốc tế (UN, World Bank)</span>
+            </td>
+            <td style="background:#fff3cd; padding:16px;">
+              <strong>Keep Informed (Cập nhật thường xuyên)</strong><br>
+              <span style="font-size:12px; color:var(--text-secondary);">Người dùng cuối, NGO môi trường, Doanh nghiệp GTVT xanh, Cộng đồng học thuật (ITRI/FJCU)</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <div class="callout-title">Chiến lược tiếp cận</div>
+      <ul style="margin:0; font-size:13.5px;">
+        <li><strong>Manage Closely:</strong> Demo trực tiếp, pitch deck cho ban giám khảo; cung cấp aggregate data cho chính quyền khi được yêu cầu.</li>
+        <li><strong>Keep Informed:</strong> Social media, blog series, bài báo khoa học; newsletter cho NGO; academic paper cho ITRI/FJCU.</li>
+        <li><strong>Monitor:</strong> Tuân thủ App Store policies, đáp ứng review guidelines.</li>
+        <li><strong>Minimal Effort:</strong> Press release khi đạt milestones (VD: 10,000 người dùng, giảm X tấn CO2).</li>
+      </ul>
+    </div>
+
+    <h3>8.3 Phân tích chi tiết từng nhóm trọng tâm</h3>
+
+    <h3 style="color:var(--primary); font-size:15px; margin-bottom:6px;">Người dùng cuối — Nhóm Primary</h3>
+    <p><strong>Demographics:</strong> Cư dân TP.HCM và các thành phố lớn VN, độ tuổi 18-45, sử dụng xe máy hoặc ô tô là phương tiện di chuyển chính. Đặc biệt phù hợp với sinh viên đại học, nhân viên văn phòng, và gia đình trẻ có ý thức về môi trường.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Pain Point</th>
+            <th>AirGuard Solution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Không biết mình phát thải bao nhiêu CO2 mỗi ngày</td>
+            <td>Trip logging với kết quả tức thì (E = d x EF)</td>
+          </tr>
+          <tr>
+            <td>Thấy con số kg CO2 nhưng không hình dung được</td>
+            <td>Carbon equivalents: "tương đương X lần sạc iPhone"</td>
+          </tr>
+          <tr>
+            <td>Lo ngại về quyền riêng tư khi dùng app tracking</td>
+            <td>Privacy-by-design: không backend, không cloud, local-only</td>
+          </tr>
+          <tr>
+            <td>Không biết mình đang dùng nhiều hay ít carbon so với người khác</td>
+            <td>Daily budget tracker + green score + streak system</td>
+          </tr>
+          <tr>
+            <td>Muốn giảm carbon nhưng không biết bắt đầu từ đâu</td>
+            <td>Gợi ý phương tiện thay thế (MRT vs. xe máy vs. đi bộ)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="color:var(--primary); font-size:15px; margin-bottom:6px;">Cơ quan chính quyền — Nhóm Secondary</h3>
+    <p><strong>Các bên liên quan:</strong> Sở Giao thông Vận tải TP.HCM, Sở Tài nguyên và Môi trường TP.HCM, Cục Đăng kiểm Việt Nam, Ủy ban Nhân dân TP.HCM, Bộ Tài nguyên và Môi trường, Đề án Net Zero 2050 của Chính phủ VN.</p>
+    <p><strong>Pain Points:</strong> Thiếu dữ liệu hành vi di chuyển của người dân ở cấp vi mô; khó đánh giá hiệu quả của các chính sách giao thông xanh; cần bằng chứng khoa học cho việc thúc đẩy Metro, xe buýt điện, và hạn chế xe cá nhân.</p>
+    <div class="callout info">
+      <div class="callout-title">Cơ hội hợp tác</div>
+      <p style="font-size:13.5px; margin:0;">AirGuard có tiềm năng cung cấp <strong>dữ liệu ẩn danh tổng hợp</strong> (aggregated, anonymized) cho Sở GTVT và Sở TN&MT TP.HCM — ví dụ: tỷ lệ modal split theo khu vực, CO2 tiết kiệm được khi người dùng chuyển từ xe máy sang Metro. Dữ liệu này hoàn toàn privacy-preserving: không có IP, không có GPS trace, chỉ có số liệu thống kê tổng hợp.</p>
+    </div>
+
+    <h3 style="color:var(--primary); font-size:15px; margin-bottom:6px;">Ban giám khảo Hackathon — Nhóm Tertiary</h3>
+    <p><strong>Tiêu chí đánh giá của Asian Hackathon for Green Future 2026:</strong></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tiêu chí</th>
+            <th>AirGuard đáp ứng như thế nào</th>
+            <th>Bằng chứng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Innovation</strong></td>
+            <td>Privacy-first carbon tracking; local-only computation; carbon equivalents visualization</td>
+            <td>Không app nào tại VN có feature set tương tự với privacy model này</td>
+          </tr>
+          <tr>
+            <td><strong>Feasibility</strong></td>
+            <td>Prototype MVP SwiftUI iOS, tính toán EF cục bộ; có thể mở rộng Android sau</td>
+            <td>dataset_research.html; mã nguồn AirGuard/ (SwiftUI, EmissionEngine)</td>
+          </tr>
+          <tr>
+            <td><strong>Scalability</strong></td>
+            <td>Hardcoded EF cho 13+ vehicle types, dễ mở rộng thêm phương tiện (V2: flight, LCV)</td>
+            <td>Roadmap có sẵn từ MVP → V2 → V3 → V4</td>
+          </tr>
+          <tr>
+            <td><strong>Real-world Impact</strong></td>
+            <td>Người dùng thay đổi hành vi khi thấy tác động carbon; phù hợp Net Zero 2050 VN; có tiềm năng policy tool</td>
+            <td>Budget tracker, green score, aggregate data for government</td>
+          </tr>
+          <tr>
+            <td><strong>Scientific Rigor</strong></td>
+            <td>EF từ DEFRA 2025, ITRI/FJCU, ICCT; tuân thủ ISO 14064-1:2018, ISO 14067:2018; 18 tài liệu tham khảo</td>
+            <td>Section 5 (Dataset khuyến nghị), Section 9 (Tài liệu tham khảo)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>8.4 Engagement Strategy</h3>
+    <p>Chiến lược tiếp cận từng nhóm stakeholder qua các giai đoạn phát triển của AirGuard:</p>
+
+    <h3 style="color:var(--primary); font-size:15px;">Giai đoạn MVP (Hackathon — Tháng 5/2026)</h3>
+    <ul>
+      <li><strong>Ban giám khảo:</strong> Demo trực tiếp prototype, trình bày scientific foundation rõ ràng, highlight privacy model.</li>
+      <li><strong>Người dùng cuối:</strong> Beta testing nội bộ nhóm; thu thập feedback về UX và EF accuracy.</li>
+      <li><strong>Cộng đồng học thuật:</strong> Báo cáo nghiên cứu dataset cho ITRI/FJCU để cross-validate emission factors.</li>
+    </ul>
+
+    <h3 style="color:var(--primary); font-size:15px;">Giai đoạn V2 (Post-hackathon — Tháng 6-8/2026)</h3>
+    <ul>
+      <li><strong>Người dùng cuối:</strong> Phát hành trên App Store / Google Play; chiến dịch truyền thông trên mạng xã hội (TikTok, Facebook, Zalo).</li>
+      <li><strong>Doanh nghiệp GTVT xanh:</strong> Liên hệ VinFast, Grab, Metro HCM để tích hợp in-app badges; đề xuất partnership.</li>
+      <li><strong>Chính quyền:</strong> Gửi báo cáo aggregate data (anonymized) cho Sở GTVT và Sở TN&MT TP.HCM.</li>
+      <li><strong>NGO:</strong> Cung cấp dashboard miễn phí cho các tổ chức môi trường.</li>
+    </ul>
+
+    <h3 style="color:var(--primary); font-size:15px;">Giai đoạn Scale-up (V3+ — Tháng 9/2026+)</h3>
+    <ul>
+      <li><strong>Người dùng:</strong> Gamification nâng cao (leaderboard theo khu vực, achievement badges, community challenges).</li>
+      <li><strong>Chính quyền:</strong> API cho phép researchers truy cập aggregate data; policy dashboard cho city planners.</li>
+      <li><strong>Học thuật:</strong> Academic paper về hành vi giao thông tại HCM dựa trên AirGuard data.</li>
+      <li><strong>Doanh nghiệp:</strong> B2B tier: companies có thể track fleet emissions qua dashboard.</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-title">Tóm tắt giá trị Stakeholder</div>
+      <p style="font-size:13.5px; margin:0;">AirGuard không chỉ là một app tracking — nó là một <strong>multi-stakeholder platform</strong>: người dùng nhận được transparency về carbon footprint cá nhân; chính quyền nhận được dữ liệu hành vi để xây dựng policy; cộng đồng học thuật nhận được dataset được cross-validate; và toàn xã hội tiến gần hơn tới mục tiêu Net Zero 2050.</p>
+    </div>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="section" id="references">
+    <h2><span class="section-number">10</span>Tài liệu tham khảo (APA 7th)</h2>
+    <ol class="ref-list">
+      <li>
+        <span class="ref-num">1</span>
+        <div class="ref-text">Department for Environment, Food and Rural Affairs. (2025). <em>Greenhouse gas reporting: Conversion factors 2025</em>. UK Government. https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2025 — Downloaded and verified: <code>defra_2025_condensed_set.xlsx</code> in <code>dataset/</code>.</div>
+      </li>
+      <li>
+        <span class="ref-num">2</span>
+        <div class="ref-text">Department for Transport. (2025). <em>Transport energy environment statistics: 2025 annual report</em>. UK Government.</div>
+      </li>
+      <li>
+        <span class="ref-num">3</span>
+        <div class="ref-text">International Council on Clean Transportation. (2024). <em>Real-world CO2 emissions from passenger vehicles in Asia</em>. https://theicct.org</div>
+      </li>
+      <li>
+        <span class="ref-num">4</span>
+        <div class="ref-text">International Council on Clean Transportation. (2023). <em>China new vehicle emissions 2023</em>. https://theicct.org</div>
+      </li>
+      <li>
+        <span class="ref-num">5</span>
+        <div class="ref-text">Intergovernmental Panel on Climate Change. (2006). <em>2006 IPCC guidelines for national greenhouse gas inventories: Volume 2 — Energy, Chapter 3: Mobile combustion</em>. Geneva: IPCC. — Downloaded: <code>ipcc_2006gl_vol2_ch3_mobile_combustion.pdf</code> in <code>dataset/</code>.</div>
+      </li>
+      <li>
+        <span class="ref-num">6</span>
+        <div class="ref-text">Intergovernmental Panel on Climate Change. (2019). <em>Refinement to the 2006 IPCC guidelines for national greenhouse gas inventories: Volume 4 — Agriculture, forestry and other land use</em>. Geneva: IPCC.</div>
+      </li>
+      <li>
+        <span class="ref-num">7</span>
+        <div class="ref-text">Intergovernmental Panel on Climate Change. (2021). <em>Climate change 2021: The physical science basis</em>. Cambridge: Cambridge University Press.</div>
+      </li>
+      <li>
+        <span class="ref-num">8</span>
+        <div class="ref-text">Asian Development Bank. (2023). <em>Asia sustainable transport outlook 2023</em>. Manila: ADB.</div>
+      </li>
+      <li>
+        <span class="ref-num">9</span>
+        <div class="ref-text">Asian Development Bank. (2022). <em>Southeast Asia transport outlook</em>. Manila: ADB.</div>
+      </li>
+      <li>
+        <span class="ref-num">10</span>
+        <div class="ref-text">Greenhouse Gas Protocol. (2013). <em>Scope 3 category 6: Business travel — Passenger transport</em>. World Resources Institute. https://www.ghgprotocol.org/c3-s3-passenger-transport</div>
+      </li>
+      <li>
+        <span class="ref-num">11</span>
+        <div class="ref-text">Greenhouse Gas Protocol. (2013). <em>Corporate value chain (Scope 3) accounting and reporting standard</em>. World Resources Institute.</div>
+      </li>
+      <li>
+        <span class="ref-num">12</span>
+        <div class="ref-text">Industrial Technology Research Institute. (n.d.). <em>Sustainable Carbon Management Platform (SCMP)</em>. https://scmp.itri.org.tw</div>
+      </li>
+      <li>
+        <span class="ref-num">13</span>
+        <div class="ref-text">Fu Jen Catholic University. (2024). <em>Carbon Footprint Summer Camp — Emission Factor Database</em>. Taiwan.</div>
+      </li>
+      <li>
+        <span class="ref-num">14</span>
+        <div class="ref-text">International Energy Agency. (2023). <em>CO2 emissions in 2023</em>. Paris: IEA Publications.</div>
+      </li>
+      <li>
+        <span class="ref-num">15</span>
+        <div class="ref-text">International Organization for Standardization. (2018). <em>ISO 14064-1:2018: Greenhouse gases — Part 1: Specification with guidance at the organization level for quantification and reporting of greenhouse gas emissions and removals</em>. Geneva: ISO.</div>
+      </li>
+      <li>
+        <span class="ref-num">16</span>
+        <div class="ref-text">International Organization for Standardization. (2018). <em>ISO 14067:2018: Greenhouse gases — Product category rules (PCR) for carbon footprint of products</em>. Geneva: ISO.</div>
+      </li>
+      <li>
+        <span class="ref-num">17</span>
+        <div class="ref-text">U.S. Energy Information Administration. (2024). <em>Carbon dioxide emissions coefficients</em>. https://www.eia.gov/environment/emissions/co2_vol_mass.php</div>
+      </li>
+      <li>
+        <span class="ref-num">18</span>
+        <div class="ref-text">ecoinvent. (2024). <em>ecoinvent database version 3.9</em>. https://www.ecoinvent.org</div>
+      </li>
+    </ol>
+  </div>
+
+  <!-- APPENDIX -->
+  <div class="section" id="appendix">
+    <h2><span class="section-number">11</span>Phụ lục — Quick Reference Cards</h2>
+
+    <div class="appendix-section">
+      <h4>DEFRA 2025 — Key Values (Primary Source)</h4>
+      <div class="table-wrap" style="margin:0; border:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Sub-type</th>
+              <th>kg CO2/pax-km</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Motorcycle</td><td>Petrol average</td><td>0.1137</td><td>UK fleet average 125-500cc (DEFRA 2025 verified)</td></tr>
+            <tr><td>Motorcycle</td><td>Petrol small (&lt;125cc)</td><td>0.0832</td><td></td></tr>
+            <tr><td>Motorcycle</td><td>Petrol medium (125-500cc)</td><td>0.1011</td><td></td></tr>
+            <tr><td>Motorcycle</td><td>Petrol large (&gt;500cc)</td><td>0.1325</td><td></td></tr>
+            <tr><td>Car</td><td>Small petrol (&lt;1.5L)</td><td>0.1431</td><td>DEFRA 2025 Small car, petrol</td></tr>
+            <tr><td>Car</td><td>Medium petrol (1.5-2.5L)</td><td>0.1747</td><td>DEFRA 2025 Medium car, petrol</td></tr>
+            <tr><td>Car</td><td>Large petrol (&gt;2.5L)</td><td>0.2683</td><td>DEFRA 2025 Large car, petrol</td></tr>
+            <tr><td>Car</td><td>Diesel small/avg</td><td>0.1434–0.1730</td><td>DEFRA 2025 Small-Diesel: 0.1434, Avg-Diesel: 0.1730</td></tr>
+            <tr><td>Car</td><td>Hybrid</td><td>0.1283</td><td>DEFRA 2025 Average car, hybrid</td></tr>
+            <tr><td>Car</td><td>Electric (TTW)</td><td>0.000</td><td>DEFRA 2025 Battery EV</td></tr>
+            <tr><td>Bus</td><td>City diesel (not London)</td><td>0.1253</td><td>Per passenger-km (DEFRA 2025 verified)</td></tr>
+            <tr><td>Bus</td><td>Average local bus</td><td>0.1039</td><td>Per passenger-km</td></tr>
+            <tr><td>Bus</td><td>London bus</td><td>0.0688</td><td>Per passenger-km</td></tr>
+            <tr><td>Bus</td><td>Coach (long distance)</td><td>0.0278</td><td>Per passenger-km</td></tr>
+            <tr><td>Taxi</td><td>Regular taxi</td><td>0.1486</td><td>Per passenger-km (DEFRA 2025 verified)</td></tr>
+            <tr><td>Taxi</td><td>Black cab</td><td>0.2040</td><td>Per passenger-km</td></tr>
+            <tr><td>Rail</td><td>Light rail / tram</td><td>0.0286</td><td>Per passenger-km (DEFRA 2025 verified)</td></tr>
+            <tr><td>Rail</td><td>National rail (electric)</td><td>0.0355</td><td>Per passenger-km</td></tr>
+            <tr><td>Rail</td><td>Diesel regional</td><td>0.120</td><td>Per passenger-km (GHG Protocol)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="appendix-section">
+      <h4>ICCT Asia — Real-World Vehicle Emissions (Supplementary)</h4>
+      <div class="table-wrap" style="margin:0; border:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>Country/Region</th>
+              <th>Motorcycle (g/km)</th>
+              <th>Car avg (g/km)</th>
+              <th>Bus city diesel (g/pax-km)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Vietnam</td><td>80–100</td><td>140–170</td><td>90–120</td><td>DEFRA 2025 verified: motorbike avg 0.1137 (113.7 g), car diesel 0.173 (173 g), bus 0.1253 (125.3 g)</td></tr>
+            <tr><td>Thailand</td><td>85–105</td><td>150–180</td><td>80–110</td><td></td></tr>
+            <tr><td>Indonesia</td><td>90–110</td><td>150–180</td><td>100–130</td><td></td></tr>
+            <tr><td>India</td><td>75–95</td><td>130–160</td><td>70–100</td><td></td></tr>
+            <tr><td>China</td><td>70–90</td><td>130–165</td><td>60–90</td><td></td></tr>
+            <tr><td>EU average</td><td>~90</td><td>~173</td><td>~80</td><td></td></tr>
+            <tr><td>US average</td><td>~200*</td><td>~256</td><td>~250</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:11px; color:#888; margin-top:8px;">* EPA figure for motorcycles appears to include different fleet mix/methodology. ICCT estimates for Asia are more representative for Vietnam.</p>
+    </div>
+
+    <div class="appendix-section">
+      <h4>IPCC Tier 1 Default Factors (Foundation)</h4>
+      <div class="table-wrap" style="margin:0; border:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle</th>
+              <th>Default Fuel (L/100km)</th>
+              <th>EF Fuel (kg CO2/L)</th>
+              <th>→ kg CO2/km</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Motorcycle</td><td>~4.0</td><td>2.28 (petrol)</td><td>0.091</td></tr>
+            <tr><td>Car petrol</td><td>~7.6</td><td>2.28 (petrol)</td><td>0.173</td></tr>
+            <tr><td>Car diesel</td><td>~6.4</td><td>2.65 (diesel)</td><td>0.170</td></tr>
+            <tr><td>Bus</td><td>~15</td><td>2.65 (diesel)</td><td>0.398</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:11px; color:#888; margin-top:8px;">Note: IPCC uses fuel-based defaults — actual per-km factors above are calculated as: fuel_consumption × EF_fuel. DEFRA's per-passenger values are typically lower because they account for occupancy (bus: 30+ pax → 0.398/30 ≈ 0.013 kg/pax-km raw + overhead).</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="text-align:center; padding: 32px 0 16px; color: var(--text-secondary); font-size:12px;">
+    <p style="margin-bottom:4px;"><strong>AirGuard</strong> — Carbon-Aware Urban Mobility Intelligence Platform</p>
+    <p>Nhóm AirGuardian · Asian Hackathon for Green Future 2026</p>
+    <p style="margin-top:8px; opacity:0.6;">Nghiên cứu này chỉ mang tính tham khảo. Tất cả hệ số phát thải là ước tính sơ bộ (preliminary, approximately) và cần được xác thực thêm trước khi sử dụng trong môi trường sản xuất.</p>
+  </div>
+
+</div>
+
+<script>
+  // Smooth scroll for TOC links
+  document.querySelectorAll('.toc a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        const offset = 60;
+        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Active nav highlighting
+  const sections = document.querySelectorAll('.section[id], .section[id^="section-"]');
+  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+  function updateActiveNav() {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.getBoundingClientRect().top;
+      if (top <= 80) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveNav);
+  updateActiveNav();
+</script>
+
+</body>
+</html>

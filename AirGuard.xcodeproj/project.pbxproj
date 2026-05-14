@@ -1,0 +1,657 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A20000000000000000000001 /* AirGuardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000001 /* AirGuardApp.swift */; };
+		A20000000000000000000002 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000002 /* RootView.swift */; };
+		A20000000000000000000003 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000003 /* MainTabView.swift */; };
+		A20000000000000000000004 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000004 /* AppTheme.swift */; };
+		A20000000000000000000005 /* EmissionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000005 /* EmissionEngine.swift */; };
+		A20000000000000000000006 /* TripEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000006 /* TripEntry.swift */; };
+		A20000000000000000000007 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000007 /* UserProfile.swift */; };
+		A20000000000000000000008 /* TripStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000008 /* TripStore.swift */; };
+		A20000000000000000000009 /* UserProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000009 /* UserProfileStore.swift */; };
+		A2000000000000000000000A /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000000A /* HomeViewModel.swift */; };
+		A2000000000000000000000B /* LogTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000000B /* LogTripViewModel.swift */; };
+		A2000000000000000000000C /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000000C /* HistoryViewModel.swift */; };
+		A2000000000000000000000D /* StatsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000000D /* StatsViewModel.swift */; };
+		A2000000000000000000000E /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000000E /* SettingsViewModel.swift */; };
+		A2000000000000000000000F /* DailyGaugeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000000F /* DailyGaugeView.swift */; };
+		A20000000000000000000010 /* TripRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000010 /* TripRowView.swift */; };
+		A20000000000000000000011 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000011 /* HomeView.swift */; };
+		A20000000000000000000012 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000012 /* HistoryView.swift */; };
+		A20000000000000000000013 /* LogTripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000013 /* LogTripView.swift */; };
+		A20000000000000000000014 /* TripResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000014 /* TripResultView.swift */; };
+		A20000000000000000000015 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000015 /* StatsView.swift */; };
+		A20000000000000000000016 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000016 /* SettingsView.swift */; };
+		A20000000000000000000017 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000017 /* WelcomeView.swift */; };
+		A20000000000000000000018 /* MotionAutoTripTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000018 /* MotionAutoTripTracker.swift */; };
+		A20000000000000000000019 /* TrackingLiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000019 /* TrackingLiveActivityManager.swift */; };
+		A2000000000000000000001A /* TrackingActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001A /* TrackingActivityAttributes.swift */; };
+		A2000000000000000000001B /* AirGuardWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001B /* AirGuardWidgetBundle.swift */; };
+		A2000000000000000000001C /* TrackingLiveActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001C /* TrackingLiveActivityWidget.swift */; };
+		A2000000000000000000001D /* TrackingActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001A /* TrackingActivityAttributes.swift */; };
+		A2000000000000000000001E /* AirGuardWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001D /* AirGuardWidgetExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A2000000000000000000001F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001F /* Assets.xcassets */; };
+		A20000000000000000000021 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001F /* Assets.xcassets */; };
+		A20000000000000000000024 /* AppHeaderWordmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000022 /* AppHeaderWordmark.swift */; };
+		A20000000000000000000029 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000023 /* AppDelegate.swift */; };
+		A20000000000000000000030 /* TripNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000024 /* TripNotificationManager.swift */; };
+		A20000000000000000000031 /* TripSummaryRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000025 /* TripSummaryRouter.swift */; };
+		A20000000000000000000032 /* TripSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000026 /* TripSummaryView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A91000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A60000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A50000000000000000000002;
+			remoteInfo = AirGuardWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A30000000000000000000005 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A2000000000000000000001E /* AirGuardWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A10000000000000000000001 /* AirGuardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirGuardApp.swift; sourceTree = "<group>"; };
+		A10000000000000000000023 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A10000000000000000000002 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		A10000000000000000000003 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		A10000000000000000000004 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		A10000000000000000000005 /* EmissionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmissionEngine.swift; sourceTree = "<group>"; };
+		A10000000000000000000006 /* TripEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripEntry.swift; sourceTree = "<group>"; };
+		A10000000000000000000007 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		A10000000000000000000008 /* TripStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripStore.swift; sourceTree = "<group>"; };
+		A10000000000000000000024 /* TripNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripNotificationManager.swift; sourceTree = "<group>"; };
+		A10000000000000000000009 /* UserProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileStore.swift; sourceTree = "<group>"; };
+		A1000000000000000000000A /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		A1000000000000000000000B /* LogTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTripViewModel.swift; sourceTree = "<group>"; };
+		A1000000000000000000000C /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
+		A1000000000000000000000D /* StatsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewModel.swift; sourceTree = "<group>"; };
+		A1000000000000000000000E /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		A1000000000000000000000F /* DailyGaugeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyGaugeView.swift; sourceTree = "<group>"; };
+		A10000000000000000000010 /* TripRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRowView.swift; sourceTree = "<group>"; };
+		A10000000000000000000011 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A10000000000000000000012 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		A10000000000000000000013 /* LogTripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTripView.swift; sourceTree = "<group>"; };
+		A10000000000000000000014 /* TripResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripResultView.swift; sourceTree = "<group>"; };
+		A10000000000000000000015 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		A10000000000000000000016 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A10000000000000000000017 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		A10000000000000000000018 /* MotionAutoTripTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionAutoTripTracker.swift; sourceTree = "<group>"; };
+		A10000000000000000000019 /* TrackingLiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingLiveActivityManager.swift; sourceTree = "<group>"; };
+		A1000000000000000000001A /* TrackingActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingActivityAttributes.swift; sourceTree = "<group>"; };
+		A1000000000000000000001B /* AirGuardWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirGuardWidgetBundle.swift; sourceTree = "<group>"; };
+		A1000000000000000000001C /* TrackingLiveActivityWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingLiveActivityWidget.swift; sourceTree = "<group>"; };
+		A1000000000000000000001D /* AirGuardWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AirGuardWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1000000000000000000001E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1000000000000000000001F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A10000000000000000000022 /* AppHeaderWordmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHeaderWordmark.swift; sourceTree = "<group>"; };
+		A10000000000000000000025 /* TripSummaryRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripSummaryRouter.swift; sourceTree = "<group>"; };
+		A10000000000000000000026 /* TripSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripSummaryView.swift; sourceTree = "<group>"; };
+		A100000000000000000000F0 /* AirGuard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirGuard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A30000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A30000000000000000000004 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A40000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000002 /* AirGuard */,
+				A40000000000000000000011 /* AirGuardWidgetExtension */,
+				A40000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A40000000000000000000002 /* AirGuard */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000001 /* AirGuardApp.swift */,
+				A10000000000000000000023 /* AppDelegate.swift */,
+				A10000000000000000000002 /* RootView.swift */,
+				A10000000000000000000003 /* MainTabView.swift */,
+				A1000000000000000000001F /* Assets.xcassets */,
+				A40000000000000000000004 /* Core */,
+				A40000000000000000000010 /* Shared */,
+				A40000000000000000000005 /* Models */,
+				A40000000000000000000006 /* Services */,
+				A40000000000000000000007 /* ViewModels */,
+				A40000000000000000000008 /* Views */,
+			);
+			path = AirGuard;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A100000000000000000000F0 /* AirGuard.app */,
+				A1000000000000000000001D /* AirGuardWidgetExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000004 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000004 /* AppTheme.swift */,
+				A10000000000000000000005 /* EmissionEngine.swift */,
+				A10000000000000000000025 /* TripSummaryRouter.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000005 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000006 /* TripEntry.swift */,
+				A10000000000000000000007 /* UserProfile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000006 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000008 /* TripStore.swift */,
+				A10000000000000000000024 /* TripNotificationManager.swift */,
+				A10000000000000000000009 /* UserProfileStore.swift */,
+				A10000000000000000000018 /* MotionAutoTripTracker.swift */,
+				A10000000000000000000019 /* TrackingLiveActivityManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000007 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A1000000000000000000000A /* HomeViewModel.swift */,
+				A1000000000000000000000B /* LogTripViewModel.swift */,
+				A1000000000000000000000C /* HistoryViewModel.swift */,
+				A1000000000000000000000D /* StatsViewModel.swift */,
+				A1000000000000000000000E /* SettingsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000008 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000009 /* Components */,
+				A4000000000000000000000A /* Home */,
+				A4000000000000000000000B /* History */,
+				A4000000000000000000000C /* Log */,
+				A40000000000000000000012 /* Summary */,
+				A4000000000000000000000D /* Stats */,
+				A4000000000000000000000E /* Settings */,
+				A4000000000000000000000F /* Welcome */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000012 /* Summary */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000026 /* TripSummaryView.swift */,
+			);
+			path = Summary;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000009 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000022 /* AppHeaderWordmark.swift */,
+				A1000000000000000000000F /* DailyGaugeView.swift */,
+				A10000000000000000000010 /* TripRowView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000A /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000011 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000B /* History */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000012 /* HistoryView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000C /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000013 /* LogTripView.swift */,
+				A10000000000000000000014 /* TripResultView.swift */,
+			);
+			path = Log;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000D /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000015 /* StatsView.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000E /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000016 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A4000000000000000000000F /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000017 /* WelcomeView.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000010 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				A1000000000000000000001A /* TrackingActivityAttributes.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000011 /* AirGuardWidgetExtension */ = {
+			isa = PBXGroup;
+			children = (
+				A1000000000000000000001B /* AirGuardWidgetBundle.swift */,
+				A1000000000000000000001C /* TrackingLiveActivityWidget.swift */,
+				A1000000000000000000001E /* Info.plist */,
+			);
+			path = AirGuardWidgetExtension;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000000000000000000001 /* AirGuard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70000000000000000000002 /* Build configuration list for PBXNativeTarget "AirGuard" */;
+			buildPhases = (
+				A30000000000000000000005 /* Embed App Extensions */,
+				A30000000000000000000002 /* Sources */,
+				A30000000000000000000006 /* Resources */,
+				A30000000000000000000001 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A92000000000000000000001 /* PBXTargetDependency */,
+			);
+			name = AirGuard;
+			productName = AirGuard;
+			productReference = A100000000000000000000F0 /* AirGuard.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A50000000000000000000002 /* AirGuardWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70000000000000000000003 /* Build configuration list for PBXNativeTarget "AirGuardWidgetExtension" */;
+			buildPhases = (
+				A30000000000000000000003 /* Sources */,
+				A30000000000000000000007 /* Resources */,
+				A30000000000000000000004 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AirGuardWidgetExtension;
+			productName = AirGuardWidgetExtension;
+			productReference = A1000000000000000000001D /* AirGuardWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A60000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A50000000000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					A50000000000000000000002 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A70000000000000000000001 /* Build configuration list for PBXProject "AirGuard" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A40000000000000000000001;
+			productRefGroup = A40000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A50000000000000000000001 /* AirGuard */,
+				A50000000000000000000002 /* AirGuardWidgetExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A30000000000000000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2000000000000000000001F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A30000000000000000000007 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A20000000000000000000021 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A30000000000000000000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A20000000000000000000001 /* AirGuardApp.swift in Sources */,
+				A20000000000000000000029 /* AppDelegate.swift in Sources */,
+				A20000000000000000000002 /* RootView.swift in Sources */,
+				A20000000000000000000003 /* MainTabView.swift in Sources */,
+				A20000000000000000000004 /* AppTheme.swift in Sources */,
+				A20000000000000000000005 /* EmissionEngine.swift in Sources */,
+				A20000000000000000000031 /* TripSummaryRouter.swift in Sources */,
+				A20000000000000000000006 /* TripEntry.swift in Sources */,
+				A20000000000000000000007 /* UserProfile.swift in Sources */,
+				A20000000000000000000008 /* TripStore.swift in Sources */,
+				A20000000000000000000030 /* TripNotificationManager.swift in Sources */,
+				A20000000000000000000009 /* UserProfileStore.swift in Sources */,
+				A2000000000000000000000A /* HomeViewModel.swift in Sources */,
+				A2000000000000000000000B /* LogTripViewModel.swift in Sources */,
+				A2000000000000000000000C /* HistoryViewModel.swift in Sources */,
+				A2000000000000000000000D /* StatsViewModel.swift in Sources */,
+				A2000000000000000000000E /* SettingsViewModel.swift in Sources */,
+				A2000000000000000000000F /* DailyGaugeView.swift in Sources */,
+				A20000000000000000000024 /* AppHeaderWordmark.swift in Sources */,
+				A20000000000000000000010 /* TripRowView.swift in Sources */,
+				A20000000000000000000011 /* HomeView.swift in Sources */,
+				A20000000000000000000012 /* HistoryView.swift in Sources */,
+				A20000000000000000000013 /* LogTripView.swift in Sources */,
+				A20000000000000000000014 /* TripResultView.swift in Sources */,
+				A20000000000000000000032 /* TripSummaryView.swift in Sources */,
+				A20000000000000000000015 /* StatsView.swift in Sources */,
+				A20000000000000000000016 /* SettingsView.swift in Sources */,
+				A20000000000000000000017 /* WelcomeView.swift in Sources */,
+				A20000000000000000000018 /* MotionAutoTripTracker.swift in Sources */,
+				A20000000000000000000019 /* TrackingLiveActivityManager.swift in Sources */,
+				A2000000000000000000001A /* TrackingActivityAttributes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A30000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2000000000000000000001B /* AirGuardWidgetBundle.swift in Sources */,
+				A2000000000000000000001C /* TrackingLiveActivityWidget.swift in Sources */,
+				A2000000000000000000001D /* TrackingActivityAttributes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A92000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A50000000000000000000002 /* AirGuardWidgetExtension */;
+			targetProxy = A91000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A80000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A80000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A80000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GV2ANVD55S;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = AirGuard;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "AirGuard uses your location in the background to continue trip tracking when auto-tracking is enabled.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "AirGuard uses your location to measure trip distance during auto-tracking.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "AirGuard uses motion activity (for example driving) to detect trips when auto-tracking is enabled.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = location;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.airguard.dev.local;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A80000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GV2ANVD55S;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = AirGuard;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "AirGuard uses your location in the background to continue trip tracking when auto-tracking is enabled.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "AirGuard uses your location to measure trip distance during auto-tracking.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "AirGuard uses motion activity (for example driving) to detect trips when auto-tracking is enabled.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = location;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.airguard.dev.local;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A80000000000000000000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GV2ANVD55S;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AirGuardWidgetExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.airguard.dev.local.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A80000000000000000000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GV2ANVD55S;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AirGuardWidgetExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.airguard.dev.local.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A70000000000000000000001 /* Build configuration list for PBXProject "AirGuard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A80000000000000000000001 /* Debug */,
+				A80000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A70000000000000000000002 /* Build configuration list for PBXNativeTarget "AirGuard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A80000000000000000000003 /* Debug */,
+				A80000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A70000000000000000000003 /* Build configuration list for PBXNativeTarget "AirGuardWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A80000000000000000000005 /* Debug */,
+				A80000000000000000000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A60000000000000000000001 /* Project object */;
+}
